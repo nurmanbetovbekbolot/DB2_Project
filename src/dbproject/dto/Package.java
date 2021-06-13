@@ -1,21 +1,23 @@
 package dbproject.dto;
 
+import java.math.BigDecimal;
+
 public class Package {
     private Integer packageId;
     private String name;
     private String description;
     private Double price;
-    private Double discountprice;
+    private Double discountPrice;
 
     public Package() {
     }
 
-    public Package(Integer packageId, String name, String description, Double price, Double discountprice) {
+    public Package(Integer packageId, String name, String description, Double price, Double discountPrice) {
         this.packageId = packageId;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.discountprice = discountprice;
+        this.discountPrice = discountPrice;
     }
 
     public Integer getPackageId() {
@@ -46,15 +48,15 @@ public class Package {
         return price;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setPrice(BigDecimal price) {
+        this.price = price.doubleValue();
     }
 
     public Double getDiscountprice() {
-        return discountprice;
+        return discountPrice;
     }
 
-    public void setDiscountprice(Double discountprice) {
-        this.discountprice = discountprice;
+    public void setDiscountprice(BigDecimal discountPrice) {
+        this.discountPrice = discountPrice.doubleValue();
     }
 }

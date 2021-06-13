@@ -1,13 +1,17 @@
 package dbproject.controller;
 
 import dbproject.Main;
+import dbproject.dao.PackageDao;
+import dbproject.dao.UserDao;
+import dbproject.dto.Package;
 import dbproject.dto.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import dbproject.dao.UserDao;
 
 import java.util.Date;
 
@@ -32,10 +36,27 @@ public class MainController {
     @FXML
     private TableColumn<User,Date> createdAtColumn;
 
+    @FXML
+    private TableView<Package> packageTable;
+
+    @FXML
+    private TableColumn<Package,String> packageNameColumn;
+
+    @FXML
+    private TableColumn<Package,String> descriptionColumn;
+
+    @FXML
+    private TableColumn<Package,Double> preisColumn;
+
+    @FXML
+    private TableColumn<Package,Double> discountPreisColumn;
+
     private ObservableList<User> users = FXCollections.observableArrayList();
+    private ObservableList<Package> packages = FXCollections.observableArrayList();
 
     private Main main;
     private UserDao userDao = new UserDao();
+    private PackageDao packageDao = new PackageDao();
     @FXML
     protected void initialize() {
         vorNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
@@ -44,7 +65,26 @@ public class MainController {
         createdAtColumn.setCellValueFactory(new PropertyValueFactory<>("createdDate"));
         users.addAll(userDao.getUsers());
         userTable.setItems(users);
+
+        packageNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        preisColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        discountPreisColumn.setCellValueFactory(new PropertyValueFactory<>("discountprice"));
+        packages.addAll(packageDao.getPackages());
+        packageTable.setItems(packages);
     }
+
+
+//    private void showClientsOrders(User user){
+//        if (user != null){
+//            smsHandyTableView.setItems(main.getSmsHandyData().filtered(smsHandy -> smsHandy.getProvider().getName().equals(provider.getName())));
+//        }
+//        else {
+//            smsHandyTableView.setItems(null);
+//        }
+//    }
+
+
 //        login_button.setOnAction(new EventHandler<ActionEvent>() {
 //            Boolean loggedIn;
 //            public void handle(ActionEvent event) {
