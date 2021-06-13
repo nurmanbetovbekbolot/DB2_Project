@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="dbproject.controller.MainController">
+   <children>
+      <TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <tabs>
+            <Tab text="Benutzer">
+                <TableView fx:id="userTable" prefHeight="200.0" prefWidth="200.0">
+                  <columns>
+                      <TableColumn fx:id="vorNameColumn" prefWidth="75.0" text="Vorname" />
+                      <TableColumn fx:id="nachNameColumn" prefWidth="75.0" text="Nachname" />
+                     <TableColumn fx:id="loginColumn" prefWidth="75.0" text="Login" />
+                     <TableColumn fx:id="createdAtColumn" prefWidth="75.0" text="Erstellt_am" />
+
+                  </columns>
+                </TableView>
+            </Tab>
+          <Tab text="Untitled Tab 2" />
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>
