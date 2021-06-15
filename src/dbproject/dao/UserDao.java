@@ -1,22 +1,21 @@
 package dbproject.dao;
 
-import dbproject.db.DBConnection;
+import dbproject.db.DbConnection;
 import dbproject.dto.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao {
 
 
-    public List<User> getUsers() {
-        List<User> users = new ArrayList<>();
+    public ObservableList<User> getUsers() {
+        ObservableList<User> users = FXCollections.observableArrayList();
         String SQL = "select * from benutzer ";
-        try (Connection conn = DBConnection.connect();
+        try (Connection conn = DbConnection.connect("kunde", "1");
              Statement statement = conn.createStatement();
              ResultSet rs = statement.executeQuery(SQL)) {
             while (rs.next()) {
@@ -35,19 +34,21 @@ public class UserDao {
         return users;
     }
 
-//    public User getUserById(int id) {
-//        String SQL = "select * from users where id = ? ";
-//        try (Connection conn = DB.connect();
+//        public User getUserById(int id) {
+//        String SQL = "select * from benutzer where benutzernr = ? ";
+//        try (Connection conn = DbConnection.connect();
 //             PreparedStatement statement = conn.prepareStatement(SQL)) {
 //            statement.setInt(1, id);
 //            try (ResultSet rs = statement.executeQuery()) {
 //                if (rs.next()) {
-//                    return User.builder()
-//                            .id(rs.getInt("ID"))
-//                            .name(rs.getString("NAME"))
-//                            .password(rs.getString("PASSWORD"))
-//                            .createdDate(rs.getTimestamp("CREATED_DATE"))
-//                            .build();
+//                    User user = new User();
+//                    user.setUserId(rs.getInt("benutzernr"));
+//                    user.setFirstName(rs.getString("vorname"));
+//                    user.setLastName(rs.getString("nachname"));
+//                    user.setUserName(rs.getString("benutzer_name"));
+//                    user.setPassword(rs.getString("password"));
+//                    user.setCreatedDate(rs.getDate("erstellt_am"));
+//                    return user;
 //                }
 //            }
 //        } catch (SQLException e) {
@@ -57,12 +58,14 @@ public class UserDao {
 //    }
 //
 //    public User updateUser(User user) {
-//        String SQL = "update users set name=?, password=? where id = ?";
-//        try (Connection conn = DB.connect();
+//        String SQL = "update benutzer set vorname=?, nachname=?,benutzer_name=?, password=? where benutzernr = ?";
+//        try (Connection conn = DbConnection.connect();
 //             PreparedStatement statement = conn.prepareStatement(SQL)) {
-//            statement.setString(1, user.getName());
-//            statement.setString(2, user.getPassword());
-//            statement.setInt(3, user.getId());
+//            statement.setString(1, user.getFirstName());
+//            statement.setString(2, user.getLastName());
+//            statement.setString(3, user.getUserName());
+//            statement.setString(4, user.getPassword());
+//            statement.setInt(5, user.getUserId());
 //            statement.executeUpdate();
 //            return user;
 //        } catch (SQLException e) {
@@ -72,11 +75,13 @@ public class UserDao {
 //    }
 //
 //    public User createUser(User user) {
-//        String SQL = "insert into users(name, password, created_date) values (?, ?, now())";
-//        try (Connection conn = DB.connect();
+//        String SQL = "insert into benutzer(vorname, nachname,benutzer_name, password, created_date) values (?, ?, ?, ?, now())";
+//        try (Connection conn = DbConnection.connect();
 //             PreparedStatement statement = conn.prepareStatement(SQL)) {
-//            statement.setString(1, user.getName());
-//            statement.setString(2, user.getPassword());
+//            statement.setString(1, user.getFirstName());
+//            statement.setString(2, user.getLastName());
+//            statement.setString(3, user.getUserName());
+//            statement.setString(4, user.getPassword());
 //            statement.executeUpdate();
 //            return user;
 //        } catch (SQLException e) {
@@ -86,8 +91,8 @@ public class UserDao {
 //    }
 //
 //    public boolean deleteUserById(int id) {
-//        String SQL = "delete from users where id = ?";
-//        try (Connection conn = DB.connect();
+//        String SQL = "delete from benutzer where benutzernr = ?";
+//        try (Connection conn = DbConnection.connect();
 //             PreparedStatement statement = conn.prepareStatement(SQL)) {
 //            statement.setInt(1, id);
 //            statement.executeUpdate();

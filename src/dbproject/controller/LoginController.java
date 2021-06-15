@@ -1,7 +1,7 @@
 package dbproject.controller;
 
 import dbproject.Main;
-import dbproject.db.DBConnection;
+import dbproject.db.DbConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -23,11 +23,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-/**
- *
- * @author oXCToo
- */
-public class LoginController implements Initializable {
+
+public class LoginController {
 
     private Main main;
 
@@ -47,6 +44,8 @@ public class LoginController implements Initializable {
     Connection con = null;
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
+
+//    public String login = txtUsername.getText();
 
     @FXML
     public void handleButtonAction(MouseEvent event) {
@@ -79,39 +78,42 @@ public class LoginController implements Initializable {
 
 
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        if (con == null) {
-            lblErrors.setTextFill(Color.TOMATO);
-            lblErrors.setText("Server Error : Check");
-        } else {
-            lblErrors.setTextFill(Color.GREEN);
-            lblErrors.setText("Server is up : Good to go");
-        }
-    }
+//    @Override
+//    public void initialize(URL url, ResourceBundle rb) {
+//        // TODO
+//        if (con == null) {
+//            lblErrors.setTextFill(Color.TOMATO);
+//            lblErrors.setText("Server Error : Check");
+//        } else {
+//            lblErrors.setTextFill(Color.GREEN);
+//            lblErrors.setText("Server is up : Good to go");
+//        }
+//    }
 
-    public LoginController() {
-        con = DBConnection.connect();
-    }
+//    public LoginController() {
+//        con = DbConnection.connect(null,null);
+//    }
 
     //we gonna use string to check for status
     private String logIn() {
         String status = "Success";
-        String email = txtUsername.getText();
+        String login = txtUsername.getText();
         String password = txtPassword.getText();
-        if(email.isEmpty() || password.isEmpty()) {
+        if(login.isEmpty() || password.isEmpty()) {
             setLblError(Color.TOMATO, "Empty credentials");
             status = "Error";
         } else {
             //query
             String sql = "SELECT * FROM benutzer WHERE benutzer_name = ? and password = ?";
             try {
+                con = DbConnection.connect(login,password);
+                if (con==null)
+                    setLblError(Color.TOMATO, "Enter Correct Email/Password");
                 preparedStatement = con.prepareStatement(sql);
-                preparedStatement.setString(1, email);
+                preparedStatement.setString(1, login);
                 preparedStatement.setString(2, password);
                 resultSet = preparedStatement.executeQuery();
-                if (!resultSet.next()) {
+                 if (!resultSet.next()) {
                     setLblError(Color.TOMATO, "Enter Correct Email/Password");
                     status = "Error";
                 } else {
@@ -134,7 +136,5 @@ public class LoginController implements Initializable {
 
     public void setMain(Main main) {
         this.main = main;
-
-//        providerTableView.setItems(main.getProvidersData());
     }
 }

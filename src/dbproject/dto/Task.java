@@ -6,17 +6,17 @@ public class Task {
     private Integer taskId;
     private String name;
     private String description;
-    private Dienst dienst;
+    private Service service;
     private Date createdDate;
 
     public Task() {
     }
 
-    public Task(Integer taskId, String name, String description, Dienst dienst, Date createdDate) {
+    public Task(Integer taskId, String name, String description, Service service, Date createdDate) {
         this.taskId = taskId;
         this.name = name;
         this.description = description;
-        this.dienst = dienst;
+        this.service = service;
         this.createdDate = createdDate;
     }
 
@@ -44,12 +44,12 @@ public class Task {
         this.description = description;
     }
 
-    public Dienst getDienst() {
-        return dienst;
+    public Service getDienst() {
+        return service;
     }
 
-    public void setDienst(Dienst dienst) {
-        this.dienst = dienst;
+    public void setDienst(Service service) {
+        this.service = service;
     }
 
     public Date getCreatedDate() {

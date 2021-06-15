@@ -12,6 +12,13 @@ public class Package {
     public Package() {
     }
 
+    public Package(String name, String description, Double price, Double discountPrice) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.discountPrice = discountPrice;
+    }
+
     public Package(Integer packageId, String name, String description, Double price, Double discountPrice) {
         this.packageId = packageId;
         this.name = name;
@@ -52,11 +59,11 @@ public class Package {
         this.price = price.doubleValue();
     }
 
-    public Double getDiscountprice() {
+    public Double getDiscountPrice() {
         return discountPrice;
     }
 
-    public void setDiscountprice(BigDecimal discountPrice) {
+    public void setDiscountPrice(BigDecimal discountPrice) {
         this.discountPrice = discountPrice.doubleValue();
     }
 }
