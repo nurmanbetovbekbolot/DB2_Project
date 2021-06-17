@@ -23,6 +23,21 @@ public class User {
         this.createdDate = createdDate;
     }
 
+    public User(Integer userId, String firstName, String lastName, String userName, String password) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.password = password;
+    }
+
+    public User(String firstName, String lastName, String userName, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.password = password;
+    }
+
     public Integer getUserId() {
         return userId;
     }

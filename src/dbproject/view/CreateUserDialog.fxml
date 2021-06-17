@@ -6,37 +6,37 @@
 <?import javafx.geometry.Insets?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="dbproject.controller.PackageController"
+            fx:controller="dbproject.controller.UserController"
             prefHeight="400.0" prefWidth="600.0">
 
 
     <children>
         <VBox prefHeight="313.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <Label text="Name" />
-                <TextField fx:id="packageNameTextField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="270.0" promptText="###" style="-fx-background-color: #fff; -fx-border-style: solid; -fx-border-radius: 3; -fx-border-color: #C7C7C7;">
+                <Label text="Vorname" />
+                <TextField fx:id="firstNameTextField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="270.0" promptText="###" style="-fx-background-color: #fff; -fx-border-style: solid; -fx-border-radius: 3; -fx-border-color: #C7C7C7;">
                     <VBox.margin>
                         <Insets bottom="12.0" />
                     </VBox.margin></TextField>
-                <Label text="Bezeichnung" />
-                <TextArea fx:id="packageDescriptionTextField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="273.0" style="-fx-background-color: #fff; -fx-border-style: solid; -fx-border-radius: 3; -fx-border-color: #C7C7C7;">
-                    <VBox.margin>
-                        <Insets bottom="12.0" />
-                    </VBox.margin>
-                </TextArea>
-                <Label text="Preis" />
-                <TextField fx:id="packagePriceTextField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="286.0" style="-fx-background-color: #fff; -fx-border-radius: 3; -fx-border-style: solid; -fx-border-color: #C7C7C7;">
+                <Label text="Nachname" />
+                <TextField fx:id="lastNameTextField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="273.0" style="-fx-background-color: #fff; -fx-border-style: solid; -fx-border-radius: 3; -fx-border-color: #C7C7C7;">
                     <VBox.margin>
                         <Insets bottom="12.0" />
                     </VBox.margin>
                 </TextField>
-                <Label text="Discount Preis" />
-                <TextField fx:id="packageDiscountPriceTextField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="286.0" style="-fx-background-color: #fff; -fx-border-radius: 3; -fx-border-style: solid; -fx-border-color: #C7C7C7;">
+                <Label text="Benutzername" />
+                <TextField fx:id="loginTextField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="286.0" style="-fx-background-color: #fff; -fx-border-radius: 3; -fx-border-style: solid; -fx-border-color: #C7C7C7;">
                     <VBox.margin>
                         <Insets bottom="12.0" />
                     </VBox.margin>
                 </TextField>
-                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleCreatePackageButton" prefHeight="25.0" prefWidth="282.0" text="Neues Paket anlegen" textAlignment="CENTER">
+                <Label text="Password" />
+                <TextField fx:id="passwordTextField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="286.0" style="-fx-background-color: #fff; -fx-border-radius: 3; -fx-border-style: solid; -fx-border-color: #C7C7C7;">
+                    <VBox.margin>
+                        <Insets bottom="12.0" />
+                    </VBox.margin>
+                </TextField>
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleCreateUserButton" prefHeight="25.0" prefWidth="282.0" text="Neuer Benutzer anlegen" textAlignment="CENTER">
                     <VBox.margin>
                         <Insets top="12.0" />
                     </VBox.margin></Button>

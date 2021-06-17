@@ -57,13 +57,15 @@ public class MainController {
     @FXML
     private Button editPaketButton;
 
-//    private final ObservableList<User> users = FXCollections.observableArrayList();
-//    private final ObservableList<Package> packages = FXCollections.observableArrayList();
+
 
     private Main main;
     private UserDao userDao;
     private PackageDao packageDao;
 
+
+    private static final ObservableList<User> users = FXCollections.observableArrayList();
+    private static final ObservableList<Package> packages = FXCollections.observableArrayList();
     public MainController() {
         this.userDao = new UserDao();
         this.packageDao = new PackageDao();
@@ -81,10 +83,29 @@ public class MainController {
         preisColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         discountPreisColumn.setCellValueFactory(new PropertyValueFactory<>("discountPrice"));
 
+        users.addAll(userDao.getUsers());
+        packages.addAll(packageDao.getPackages());
+
+
+        packageTable.setRowFactory(packageTableView -> {
+
+            final TableRow<Package> row = new TableRow<>();
+            row.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+                final int index = row.getIndex();
+                if (index >= 0 && index < packageTableView.getItems().size() && packageTableView.getSelectionModel().isSelected(index)  ) {
+                    packageTable.getSelectionModel().clearSelection();
+                    event.consume();
+                }
+            });
+            return row;
+        });
+
     }
 
 
-//    private void showClientsOrders(User user){
+
+
+    //    private void showClientsOrders(User user){
 //        if (user != null){
 //            smsHandyTableView.setItems(main.getSmsHandyData().filtered(smsHandy -> smsHandy.getProvider().getName().equals(provider.getName())));
 //        }
@@ -94,10 +115,6 @@ public class MainController {
 //    }
 
 
-    /**
-     * Called when the user clicks the new button. Opens a dialog to edit
-     * details for a new Package.
-     */
     @FXML
     private void handleCreatePaket() {
         Package selectedPackage = packageTable.getSelectionModel().getSelectedItem();
@@ -111,7 +128,7 @@ public class MainController {
                 dialogStage.initModality(Modality.WINDOW_MODAL);
                 dialogStage.initOwner(this.main.getPrimaryStage());
                 dialogStage.setScene(new Scene(page));
-                CreatePackageDialogController controller = loader.getController();
+                PackageController controller = loader.getController();
                 controller.setMain(this.main);
                 controller.setStage(dialogStage);
                 dialogStage.showAndWait();
@@ -121,7 +138,6 @@ public class MainController {
             alert("Etwas ist schief gelaufen.");
             e.printStackTrace();
         }
-
     }
 
     @FXML
@@ -138,7 +154,7 @@ public class MainController {
             dialogStage.initOwner(this.main.getPrimaryStage());
             dialogStage.setScene(new Scene(page));
 
-            EditPackageDialogController controller = loader.getController();
+            PackageController controller = loader.getController();
             controller.setMain(this.main, selectedPackage);
             controller.setStage(dialogStage);
             dialogStage.showAndWait();
@@ -156,7 +172,7 @@ public class MainController {
         if (selectedPackageIndex>=0){
             Package packageInPackageTv = packageTable.getItems().get(selectedPackageIndex);
            packageDao.deletePackageById(packageInPackageTv.getPackageId());
-
+           packages.remove(packageInPackageTv);
             packageTable.getSelectionModel().clearSelection();
         }
         else{
@@ -164,20 +180,89 @@ public class MainController {
         }
     }
 
+    @FXML
+    private void handleCreateUser() {
+        User selectedUser = userTable.getSelectionModel().getSelectedItem();
+        try {
+            if (selectedUser == null) {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("../view/CreateUserDialog.fxml"));
+                AnchorPane page = loader.load();
+                Stage dialogStage = new Stage();
+                dialogStage.setTitle("User erstellen");
+                dialogStage.initModality(Modality.WINDOW_MODAL);
+                dialogStage.initOwner(this.main.getPrimaryStage());
+                dialogStage.setScene(new Scene(page));
+                UserController controller = loader.getController();
+                controller.setMain(this.main);
+                controller.setStage(dialogStage);
+                dialogStage.showAndWait();
+            }
+
+        } catch (IOException e) {
+            alert("Etwas ist schief gelaufen.");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleEditUser() {
+        User selectedUser = userTable.getSelectionModel().getSelectedItem();
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("../view/EditUserDialog.fxml"));
+            AnchorPane page = null;
+            page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("User bearbeiten");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(this.main.getPrimaryStage());
+            dialogStage.setScene(new Scene(page));
+            UserController controller = loader.getController();
+            controller.setMain(this.main, selectedUser);
+            controller.setStage(dialogStage);
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            alert("Etwas ist schief gelaufen.");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleDeleteUser(){
+        int selectedUserIndex = userTable.getSelectionModel().getSelectedIndex();
+        if (selectedUserIndex>=0){
+            User userInUserTv = userTable.getItems().get(selectedUserIndex);
+            userDao.deleteUserById(userInUserTv.getUserId());
+            users.remove(userInUserTv);
+            userTable.getSelectionModel().clearSelection();
+        }
+        else{
+            alert("Bitte wählen Sie in der Tabelle einen User aus.");
+        }
+    }
+
+    public static ObservableList<User> getUsers() {
+        return users;
+    }
+
+    public static ObservableList<Package> getPackages() {
+        return packages;
+    }
 
     public void setMain(Main main) {
         this.main = main;
-        userTable.setItems(userDao.getUsers());
-        packageTable.setItems(packageDao.getPackages());
+        userTable.setItems(users);
+        packageTable.setItems(packages);
     }
 
-    public static void infoBox(String msg, String text, String title) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText(msg);
-        alert.setTitle(title);
-        alert.setHeaderText(text);
-        alert.showAndWait();
-    }
+//    public static void infoBox(String msg, String text, String title) {
+//        Alert alert = new Alert(Alert.AlertType.ERROR);
+//        alert.setContentText(msg);
+//        alert.setTitle(title);
+//        alert.setHeaderText(text);
+//        alert.showAndWait();
+//    }
 
     private void alert(String text) {
         Alert alert = new Alert(

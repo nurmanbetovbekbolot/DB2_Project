@@ -4,21 +4,40 @@ import java.util.Date;
 
 public class Order {
     private Integer orderId;
+    private String name;
     private String description;
-    private User client;
-    private User manager;
-    private Package paket;
+    private Integer clientId;
+    private Integer managerId;
+    private Integer paketId;
     private Date createdDate;
 
     public Order() {
     }
 
-    public Order(Integer orderId, String description, User client, User manager, Package paket, Date createdDate) {
+    public Order(Integer orderId, String name, String description, Integer clientId, Integer managerId, Integer paketId) {
         this.orderId = orderId;
+        this.name = name;
         this.description = description;
-        this.client = client;
-        this.manager = manager;
-        this.paket = paket;
+        this.clientId = clientId;
+        this.managerId = managerId;
+        this.paketId = paketId;
+    }
+
+    public Order(String name, String description, Integer clientId, Integer managerId, Integer paketId) {
+        this.name = name;
+        this.description = description;
+        this.clientId = clientId;
+        this.managerId = managerId;
+        this.paketId = paketId;
+    }
+
+    public Order(Integer orderId, String name, String description, Integer clientId, Integer managerId, Integer paketId, Date createdDate) {
+        this.orderId = orderId;
+        this.name = name;
+        this.description = description;
+        this.clientId = clientId;
+        this.managerId = managerId;
+        this.paketId = paketId;
         this.createdDate = createdDate;
     }
 
@@ -38,28 +57,36 @@ public class Order {
         this.description = description;
     }
 
-    public User getClient() {
-        return client;
+    public Integer getClientId() {
+        return clientId;
     }
 
-    public void setClient(User client) {
-        this.client = client;
+    public void setClientId(Integer clientId) {
+        this.clientId = clientId;
     }
 
-    public User getManager() {
-        return manager;
+    public Integer getManagerId() {
+        return managerId;
     }
 
-    public void setManager(User manager) {
-        this.manager = manager;
+    public void setManagerId(Integer managerId) {
+        this.managerId = managerId;
     }
 
-    public Package getPaket() {
-        return paket;
+    public Integer getPaketId() {
+        return paketId;
     }
 
-    public void setPaket(Package paket) {
-        this.paket = paket;
+    public void setPaketId(Integer paketId) {
+        this.paketId = paketId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Date getCreatedDate() {

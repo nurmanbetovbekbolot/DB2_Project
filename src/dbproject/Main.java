@@ -1,7 +1,11 @@
 package dbproject;
 
 import dbproject.controller.LoginController;
+import dbproject.dto.Package;
+import dbproject.dto.User;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,10 +23,10 @@ public class Main extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("CRM Anwendung");
 
-        showMainOverview();
+        showLoginOverview();
     }
 
-    public void showMainOverview() {
+    public void showLoginOverview() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("view/Login.fxml"));
