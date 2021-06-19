@@ -12,6 +12,10 @@ public class Service {
         this.name = name;
     }
 
+    public Service(String name) {
+        this.name = name;
+    }
+
     public Integer getServiceId() {
         return serviceId;
     }

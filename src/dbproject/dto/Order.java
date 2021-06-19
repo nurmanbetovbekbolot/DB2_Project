@@ -41,6 +41,9 @@ public class Order {
         this.createdDate = createdDate;
     }
 
+//    public Order(String text, String text1, User value, User value1, Package value2) {
+//    }
+
     public Integer getOrderId() {
         return orderId;
     }

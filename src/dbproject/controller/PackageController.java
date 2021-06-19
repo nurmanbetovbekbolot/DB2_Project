@@ -95,9 +95,9 @@ public class PackageController {
                 return "Zahl sollte vom Typ Nummer sein!";
             }
         }
-        for (Package pe : packageDao.getPackages()) {
-            if (pe.getName().equals(packageNameTextField.getText())) return "Dieser datei ist besetzt";
-        }
+//        for (Package pe : packageDao.getPackages()) {
+//            if (pe.getName().equals(packageNameTextField.getText())) return "Dieser datei ist besetzt";
+//        }
         return message;
     }
 

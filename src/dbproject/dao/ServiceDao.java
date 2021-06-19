@@ -1,22 +1,18 @@
 package dbproject.dao;
 
 import dbproject.db.DbConnection;
-import dbproject.dto.Package;
 import dbproject.dto.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.math.BigDecimal;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ServiceDao {
 
     public ObservableList<Service> getServices() {
         ObservableList<Service> services = FXCollections.observableArrayList();
         String SQL = "select * from dienst ";
-        try (Connection conn = DbConnection.connect(null, null);
+        try (Connection conn = DbConnection.connect("sa", "123");
              Statement statement = conn.createStatement();
              ResultSet rs = statement.executeQuery(SQL)) {
             while (rs.next()) {
@@ -33,7 +29,7 @@ public class ServiceDao {
 
     public Service getServiceById(int id) {
         String SQL = "select * from dienst where dienstnr = ? ";
-        try (Connection conn = DbConnection.connect(null, null);
+        try (Connection conn = DbConnection.connect("sa", "123");
              PreparedStatement statement = conn.prepareStatement(SQL)) {
             statement.setInt(1, id);
             try (ResultSet rs = statement.executeQuery()) {
@@ -70,12 +66,27 @@ public class ServiceDao {
         try (Connection conn = DbConnection.connect("sa", "123");
              PreparedStatement statement = conn.prepareStatement(SQL)) {
             statement.setString(1, s.getName());
+            statement.setInt(2, s.getServiceId());
+
             statement.executeUpdate();
             return s;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean deleteServiceFromPackage(int serviceId){
+        String SQL = "delete from paket_dienste where dienstnr = ?";
+        try (Connection conn = DbConnection.connect("sa", "123");
+             PreparedStatement statement = conn.prepareStatement(SQL)) {
+            statement.setInt(1, serviceId);
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public boolean deleteServiceById(int id) {

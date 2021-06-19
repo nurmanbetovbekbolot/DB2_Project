@@ -44,7 +44,7 @@ public class UserController {
         }
         User u = userDao.createUser(new User(firstNameTextField.getText(),lastNameTextField.getText(),loginTextField.getText(),passwordTextField.getText()));
         MainController.getUsers().add(u);
-        alert("User erfolgreich angelegt!");
+        alert("Benutzer erfolgreich angelegt!");
         stage.close();
     }
 
@@ -56,7 +56,7 @@ public class UserController {
             userDao.updateUser(u);
             MainController.getUsers().remove(editedUser);
             MainController.getUsers().add(u);
-            alert("User erfolgreich bearbeitet!");
+            alert("Benutzer erfolgreich bearbeitet!");
             stage.close();
         } else {
             alert(message);

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="dbproject.controller.ServiceController"
+            prefHeight="400.0" prefWidth="600.0">
+
+
+    <children>
+        <VBox prefHeight="313.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Label text="Name" />
+                <TextField fx:id="serviceNameTextField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="270.0" promptText="###" style="-fx-background-color: #fff; -fx-border-style: solid; -fx-border-radius: 3; -fx-border-color: #C7C7C7;">
+                    <VBox.margin>
+                        <Insets bottom="12.0" />
+                    </VBox.margin></TextField>
+
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleCreateServiceButton" prefHeight="25.0" prefWidth="282.0" text="Neuer Dienst anlegen" textAlignment="CENTER">
+                    <VBox.margin>
+                        <Insets top="12.0" />
+                    </VBox.margin></Button>
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleCancelButton" prefHeight="25.0" prefWidth="282.0" text="Abbrechen" textAlignment="CENTER">
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin></Button>
+            </children>
+            <padding>
+                <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+            </padding></VBox>
+    </children>
+</AnchorPane>
