@@ -1,6 +1,7 @@
 package dbproject;
 
 import dbproject.controller.LoginController;
+import dbproject.db.DbConnection;
 import dbproject.dto.Package;
 import dbproject.dto.User;
 import javafx.application.Application;

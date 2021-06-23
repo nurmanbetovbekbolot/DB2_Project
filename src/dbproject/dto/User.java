@@ -1,5 +1,11 @@
 package dbproject.dto;
 
+import dbproject.model.Role;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 
@@ -8,9 +14,9 @@ public class User {
     private String firstName;
     private String lastName;
     private String userName;
+    private String role;
     private String password;
     private Date createdDate;
-
     public User() {
     }
 
@@ -78,11 +84,24 @@ public class User {
         this.password = password;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public Date getCreatedDate() {
         return createdDate;
     }
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    @Override
+    public String toString() {
+        return firstName+" "+lastName;
     }
 }

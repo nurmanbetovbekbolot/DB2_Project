@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="dbproject.controller.ClientController">
+    <children>
+        <TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab text="Bestellung">
+                    <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                                <BorderPane prefHeight="571.2" prefWidth="800.0" AnchorPane.bottomAnchor="0.0"
+                                            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                            AnchorPane.topAnchor="0.0">
+                                    <left>
+                                        <TableView fx:id="orderTable" prefHeight="571.2" prefWidth="800.0"
+                                                   BorderPane.alignment="CENTER">
+                                            <columns>
+                                                <TableColumn fx:id="orderNameColumn" prefWidth="75.0" text="Name"/>
+                                                <TableColumn fx:id="orderDescriptionColumn" prefWidth="75.0"
+                                                             text="Bezeihnung"/>
+                                                <TableColumn fx:id="orderClientColumn" prefWidth="75.0" text="Kunde"/>
+                                                <TableColumn fx:id="orderManagerColumn" prefWidth="119.20001220703125"
+                                                             text="Manager"/>
+
+                                                <TableColumn fx:id="orderPackageColumn" prefWidth="119.20001220703125"
+                                                             text="Paket"/>
+                                                <TableColumn fx:id="orderCreatedAtColumn" prefWidth="119.20001220703125"
+                                                             text="Erstellt_am"/>
+                                            </columns>
+                                        </TableView>
+                                    </left>
+                                    <bottom>
+                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+<!--                                            <buttons>-->
+<!--                                                <Button mnemonicParsing="false" onAction="#handleSearchVehicleButton"-->
+<!--                                                        prefWidth="150.0" text="Suche ausführen" GridPane.rowIndex="3">-->
+<!--                                                    <GridPane.margin>-->
+<!--                                                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>-->
+<!--                                                    </GridPane.margin>-->
+<!--                                                </Button>-->
+<!--                                            </buttons>-->
+                                            <!--                                            <buttons>-->
+                                            <!--                                                <Button fx:id="createOrderButton" onAction="#handleCreateOrder"-->
+                                            <!--                                                        mnemonicParsing="false" text="Bestellung erstellen"/>-->
+                                            <!--                                            </buttons>-->
+                                            <!--                                            <buttons>-->
+                                            <!--                                                <Button fx:id="editOrderButton" onAction="#handleEditOrder"-->
+                                            <!--                                                        mnemonicParsing="false" text="Bestellung bearbeiten"/>-->
+                                            <!--                                            </buttons>-->
+
+                                            <!--                                            <buttons>-->
+                                            <!--                                                <Button fx:id="deleteOrderButton" onAction="#handleDeleteOrder"-->
+                                            <!--                                                        mnemonicParsing="false" text="Bestellung löschen"/>-->
+                                            <!--                                            </buttons>-->
+                                        </ButtonBar>
+                                    </bottom>
+                                </BorderPane>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+
+            </tabs>
+        </TabPane>
+    </children>
+</AnchorPane>

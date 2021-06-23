@@ -2,6 +2,7 @@ package dbproject.controller;
 
 import dbproject.Main;
 import dbproject.dao.PackageDao;
+import dbproject.db.DbConnection;
 import dbproject.dto.Package;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -13,7 +14,7 @@ import javafx.stage.Stage;
 public class PackageController {
     private Main main;
     private Stage stage;
-    private PackageDao packageDao;
+//    private PackageDao packageDao;
     private Package editedPackage;
 
 
@@ -34,9 +35,14 @@ public class PackageController {
     private void initialize() {
     }
 
-    public PackageController() {
-        this.packageDao = new PackageDao();
-    }
+//    public PackageController() {
+//        this.packageDao = new PackageDao();
+//    }
+
+//    public PackageController(String url) {
+//        this.packageDao = new PackageDao(url);
+//    }
+
 
     @FXML
     private void handleCreatePackageButton() {
@@ -45,7 +51,7 @@ public class PackageController {
             alert(message);
             return;
         }
-        Package p = packageDao.createPackage(new Package(packageNameTextField.getText(), packageDescriptionTextField.getText(), Double.parseDouble(packagePriceTextField.getText()), Double.parseDouble(packageDiscountPriceTextField.getText())));
+        Package p = DbConnection.packageDao.createPackage(new Package(packageNameTextField.getText(), packageDescriptionTextField.getText(), Double.parseDouble(packagePriceTextField.getText()), Double.parseDouble(packageDiscountPriceTextField.getText())));
 
         MainController.getPackages().add(p);
 
@@ -59,7 +65,7 @@ public class PackageController {
         String message = checkPackageData();
         if (message.equals("")) {
             Package p = new Package(editedPackage.getPackageId(),packageNameTextField.getText(),packageDescriptionTextField.getText(),Double.parseDouble(packagePriceTextField.getText()),Double.parseDouble(packageDiscountPriceTextField.getText()));
-            packageDao.updatePackage(p);
+            DbConnection.packageDao.updatePackage(p);
             MainController.getPackages().remove(editedPackage);
             MainController.getPackages().add(p);
             alert("Paket erfolgreich bearbeitet!");

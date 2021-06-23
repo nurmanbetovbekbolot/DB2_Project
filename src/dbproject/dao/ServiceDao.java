@@ -7,12 +7,16 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 
-public class ServiceDao {
+public class ServiceDao extends DbConnection{
+
+    public ServiceDao(String url) {
+        super(url);
+    }
 
     public ObservableList<Service> getServices() {
         ObservableList<Service> services = FXCollections.observableArrayList();
         String SQL = "select * from dienst ";
-        try (Connection conn = DbConnection.connect("sa", "123");
+        try (Connection conn = connect() ;
              Statement statement = conn.createStatement();
              ResultSet rs = statement.executeQuery(SQL)) {
             while (rs.next()) {
@@ -29,7 +33,7 @@ public class ServiceDao {
 
     public Service getServiceById(int id) {
         String SQL = "select * from dienst where dienstnr = ? ";
-        try (Connection conn = DbConnection.connect("sa", "123");
+        try (Connection conn = connect() ;
              PreparedStatement statement = conn.prepareStatement(SQL)) {
             statement.setInt(1, id);
             try (ResultSet rs = statement.executeQuery()) {
@@ -49,7 +53,7 @@ public class ServiceDao {
 
     public Service createService(Service s) {
         String SQL = "insert into dienst(name) values (?)";
-        try (Connection conn = DbConnection.connect("sa", "123");
+        try (Connection conn = connect() ;
              PreparedStatement statement = conn.prepareStatement(SQL)) {
             statement.setString(1, s.getName());
 
@@ -63,7 +67,7 @@ public class ServiceDao {
 
     public Service updateService(Service s) {
         String SQL = "update dienst set name=? where dienstnr = ?";
-        try (Connection conn = DbConnection.connect("sa", "123");
+        try (Connection conn = connect() ;
              PreparedStatement statement = conn.prepareStatement(SQL)) {
             statement.setString(1, s.getName());
             statement.setInt(2, s.getServiceId());
@@ -78,7 +82,7 @@ public class ServiceDao {
 
     public boolean deleteServiceFromPackage(int serviceId){
         String SQL = "delete from paket_dienste where dienstnr = ?";
-        try (Connection conn = DbConnection.connect("sa", "123");
+        try (Connection conn = connect() ;
              PreparedStatement statement = conn.prepareStatement(SQL)) {
             statement.setInt(1, serviceId);
             statement.executeUpdate();
@@ -91,7 +95,7 @@ public class ServiceDao {
 
     public boolean deleteServiceById(int id) {
         String SQL = "delete from dienst where dienstnr = ?";
-        try (Connection conn = DbConnection.connect("sa", "123");
+        try (Connection conn = connect() ;
              PreparedStatement statement = conn.prepareStatement(SQL)) {
             statement.setInt(1, id);
             statement.executeUpdate();

@@ -1,7 +1,7 @@
 package dbproject.controller;
 
 import dbproject.Main;
-import dbproject.dao.OrderDao;
+import dbproject.db.DbConnection;
 import dbproject.dto.Order;
 import dbproject.dto.Package;
 import dbproject.dto.User;
@@ -13,7 +13,6 @@ import javafx.util.StringConverter;
 public class OrderController {
     private Main main;
     private Stage stage;
-    private OrderDao orderDao;
     private Order editedOrder;
 
 
@@ -71,9 +70,6 @@ public class OrderController {
         });
     }
 
-    public OrderController() {
-        this.orderDao = new OrderDao();
-    }
 
     @FXML
     private void handleCreateOrderButton() {
@@ -86,8 +82,8 @@ public class OrderController {
             return;
         }
         try {
-            Order o = orderDao.createOrder(new Order(orderNameTextField.getText(), orderDescriptionTextField.getText(), orderClientChoiceBox.getValue().getUserId(), orderManagerChoiceBox.getValue().getUserId(), orderPackageChoiceBox.getValue().getPackageId()));
-            MainController.getOrders().add(o);
+            Order o = DbConnection.orderDao.createOrder(new Order(orderNameTextField.getText(), orderDescriptionTextField.getText(), orderClientChoiceBox.getValue().getUserId(), orderManagerChoiceBox.getValue().getUserId(), orderPackageChoiceBox.getValue().getPackageId()));
+            MainController.getOrders().add(DbConnection.orderDao.getOrderByName(orderNameTextField.getText()));
             alert("Bestellung erfolgreich angelegt!");
             stage.close();
 
@@ -107,15 +103,34 @@ public class OrderController {
         Package p = orderPackageChoiceBox.getValue();
         if (message.equals("")) {
             Order o = new Order(editedOrder.getOrderId(), orderNameTextField.getText(), orderDescriptionTextField.getText(), client.getUserId(), manager.getUserId(), p.getPackageId());
-            orderDao.updateOrder(o);
+            DbConnection.orderDao.updateOrder(o);
             MainController.getOrders().remove(editedOrder);
-            MainController.getOrders().add(o);
+            MainController.getOrders().add(DbConnection.orderDao.getOrderById(editedOrder.getOrderId()));
             alert("Bestellung erfolgreich bearbeitet!");
             stage.close();
         } else {
             alert(message);
         }
     }
+
+    @FXML
+    private void handleMoreInfoButton() {
+        String message = checkOrderData();
+        User client = orderClientChoiceBox.getValue();
+        User manager = orderManagerChoiceBox.getValue();
+        Package p = orderPackageChoiceBox.getValue();
+        if (message.equals("")) {
+            Order o = new Order(editedOrder.getOrderId(), orderNameTextField.getText(), orderDescriptionTextField.getText(), client.getUserId(), manager.getUserId(), p.getPackageId());
+            DbConnection.orderDao.updateOrder(o);
+            MainController.getOrders().remove(editedOrder);
+            MainController.getOrders().add(DbConnection.orderDao.getOrderById(editedOrder.getOrderId()));
+            alert("Bestellung erfolgreich bearbeitet!");
+            stage.close();
+        } else {
+            alert(message);
+        }
+    }
+
 
     @FXML
     private void handleCancelButton() {
@@ -141,10 +156,15 @@ public class OrderController {
     public void setMain(Main main) {
         this.main = main;
 
-        MainController.getUsers().forEach(client -> orderClientChoiceBox.getItems().add(client));
+        MainController.getUsers().forEach(user -> {
+            if (user.getRole().equals("CLIENT")) {
+                orderClientChoiceBox.getItems().add(user);
+            }
+            else if(user.getRole().equals("MANAGER"))
+            {
+                orderManagerChoiceBox.getItems().add(user);
+            }});
         orderClientChoiceBox.setValue(orderClientChoiceBox.getItems().get(0));
-
-        MainController.getUsers().forEach(manager -> orderManagerChoiceBox.getItems().add(manager));
         orderManagerChoiceBox.setValue(orderManagerChoiceBox.getItems().get(0));
 
         MainController.getPackages().forEach(p -> orderPackageChoiceBox.getItems().add(p));
@@ -172,4 +192,7 @@ public class OrderController {
         this.stage = stage;
     }
 
+    public Stage getStage() {
+        return stage;
+    }
 }

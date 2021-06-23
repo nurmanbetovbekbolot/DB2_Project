@@ -1,13 +1,17 @@
 package dbproject.controller;
 
 import dbproject.Main;
-import dbproject.dao.*;
-import dbproject.dto.*;
+import dbproject.db.DbConnection;
 import dbproject.dto.Package;
+import dbproject.dto.*;
+import dbproject.model.Role;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -17,11 +21,17 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainController {
+public class MainController{
+
+    //User
     @FXML
     private TableView<User> userTable;
+
+    @FXML
+    private TableColumn<User, Integer> userIdColumn;
 
     @FXML
     private TableColumn<User, String> vorNameColumn;
@@ -33,10 +43,40 @@ public class MainController {
     private TableColumn<User, String> loginColumn;
 
     @FXML
+    private TableColumn<User, String> roleColumn;
+
+    @FXML
     private TableColumn<User, Date> createdAtColumn;
 
     @FXML
+    private Label uId;
+
+    @FXML
+    private Label uFname;
+
+    @FXML
+    private Label uLname;
+
+    @FXML
+    private Label uLogin;
+
+    @FXML
+    private Label uRole;
+
+    @FXML
+    private Label uPass;
+
+    @FXML
+    private Label uDate;
+
+
+    //Order
+    @FXML
     private TableView<Order> orderTable;
+
+    @FXML
+    private TableColumn<Order, Integer> orderIdColumn;
+
 
     @FXML
     private TableColumn<Order, String> orderNameColumn;
@@ -57,7 +97,34 @@ public class MainController {
     private TableColumn<Order, Date> orderCreatedAtColumn;
 
     @FXML
+    private Label oId;
+
+    @FXML
+    private Label oName;
+
+    @FXML
+    private Label oDesc;
+
+    @FXML
+    private Label oClient;
+
+    @FXML
+    private Label oManager;
+
+    @FXML
+    private Label oPackage;
+
+    @FXML
+    private Label oDate;
+
+    //Package
+
+    @FXML
     private TableView<Package> packageTable;
+
+    @FXML
+    private TableColumn<Package, Integer> packageIdColumn;
+
 
     @FXML
     private TableColumn<Package, String> packageNameColumn;
@@ -72,13 +139,41 @@ public class MainController {
     private TableColumn<Package, Double> discountPreisColumn;
 
     @FXML
+    private Label pId;
+
+    @FXML
+    private Label pName;
+
+    @FXML
+    private Label pDesc;
+
+    @FXML
+    private Label pPrice;
+
+    @FXML
+    private Label pDiscPrice;
+
+
+    //Service
+
+    @FXML
     private TableView<Service> serviceTable;
+
+    @FXML
+    private TableColumn<Service, Integer> serviceIdColumn;
+
 
     @FXML
     private TableColumn<Service, String> serviceNameColumn;
 
+
+    //Task
+
     @FXML
     private TableView<Task> taskTable;
+
+    @FXML
+    private TableColumn<Task, Integer> taskIdColumn;
 
     @FXML
     private TableColumn<Task, String> taskNameColumn;
@@ -92,14 +187,23 @@ public class MainController {
     @FXML
     private TableColumn<Task, Date> taskCreatedAtColumn;
 
+    @FXML
+    private Label tId;
+
+    @FXML
+    private Label tName;
+
+    @FXML
+    private Label tDesc;
+
+    @FXML
+    private Label tService;
+
+    @FXML
+    private Label tDate;
+
 
     private Main main;
-    private UserDao userDao;
-    private PackageDao packageDao;
-    private ServiceDao serviceDao;
-    private TaskDao taskDao;
-    private OrderDao orderDao;
-
 
     private static final ObservableList<User> users = FXCollections.observableArrayList();
     private static final ObservableList<Order> orders = FXCollections.observableArrayList();
@@ -109,20 +213,18 @@ public class MainController {
 
 
     public MainController() {
-        this.userDao = new UserDao();
-        this.packageDao = new PackageDao();
-        this.serviceDao = new ServiceDao();
-        this.taskDao = new TaskDao();
-        this.orderDao = new OrderDao();
     }
 
     @FXML
     protected void initialize() {
+        userIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
         vorNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         nachNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         loginColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));
+        roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
         createdAtColumn.setCellValueFactory(new PropertyValueFactory<>("createdDate"));
 
+        orderIdColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         orderNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         orderDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         orderClientColumn.setCellValueFactory(new PropertyValueFactory<>("clientId"));
@@ -130,54 +232,130 @@ public class MainController {
         orderPackageColumn.setCellValueFactory(new PropertyValueFactory<>("paketId"));
         orderCreatedAtColumn.setCellValueFactory(new PropertyValueFactory<>("createdDate"));
 
+        packageIdColumn.setCellValueFactory(new PropertyValueFactory<>("packageId"));
         packageNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         preisColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         discountPreisColumn.setCellValueFactory(new PropertyValueFactory<>("discountPrice"));
 
+        serviceIdColumn.setCellValueFactory(new PropertyValueFactory<>("serviceId"));
         serviceNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
+        taskIdColumn.setCellValueFactory(new PropertyValueFactory<>("taskId"));
         taskNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         taskDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         taskServiceColumn.setCellValueFactory(new PropertyValueFactory<>("service"));
         taskCreatedAtColumn.setCellValueFactory(new PropertyValueFactory<>("createdDate"));
 
-        users.addAll(userDao.getUsers());
-        orders.addAll(orderDao.getOrders());
-        packages.addAll(packageDao.getPackages());
-        services.addAll(serviceDao.getServices());
-        tasks.addAll(taskDao.getTasks());
-        packageTable.setRowFactory(packageTableView -> {
+        users.addAll(DbConnection.userDao.getUsers());
+        orders.addAll(DbConnection.orderDao.getOrders());
+        packages.addAll(DbConnection.packageDao.getPackages());
+        services.addAll(DbConnection.serviceDao.getServices());
+        tasks.addAll(DbConnection.taskDao.getTasks());
 
-            final TableRow<Package> row = new TableRow<>();
-            row.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-                final int index = row.getIndex();
-                if (index >= 0 && index < packageTableView.getItems().size() && packageTableView.getSelectionModel().isSelected(index)) {
-                    packageTable.getSelectionModel().clearSelection();
-                    event.consume();
-                }
-            });
-            return row;
+        uId.setText("Nr");
+        uFname.setText("Vorname");
+        uLname.setText("Nachname");
+        uLogin.setText("Login");
+        uRole.setText("Role");
+        uPass.setText("Password");
+        uDate.setText("Erstellt_am");
+
+        oId.setText("Nr");
+        oName.setText("Name");
+        oDesc.setText("Bezeichnung");
+        oClient.setText("Kunde");
+        oManager.setText("Manager");
+        oPackage.setText("Paket");
+        oDate.setText("Erstellt_am");
+
+        pId.setText("Nr");
+        pName.setText("Name");
+        pDesc.setText("Bezeichnung");
+        pPrice.setText("Preis");
+        pDiscPrice.setText("Discount Preis");
+
+
+        tId.setText("Nr");
+        tName.setText("Name");
+        tDesc.setText("Bezeichnung");
+        tService.setText("Dienst");
+        tDate.setText("Erstellt_am");
+
+        userTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            showUsersDetailedInfo(newValue);
         });
+        orderTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            showOrdersDetailedInfo(newValue);
+        });
+
+        packageTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            showPackagesDetailedInfo(newValue);
+        });
+
+        taskTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            showTasksDetailedInfo(newValue);
+        });
+    }
+
+    private void showUsersDetailedInfo(User u){
+        uId.setText(""+u.getUserId());
+        uFname.setText(u.getFirstName());
+        uLname.setText(u.getLastName());
+        uLogin.setText(u.getUserName());
+        uRole.setText(u.getRole());
+        uPass.setText(u.getPassword());
+        uDate.setText(u.getCreatedDate().toString());
+
+    }
+
+    private void showOrdersDetailedInfo(Order o){
+        oId.setText(""+o.getOrderId());
+        oName.setText(o.getName());
+        oDesc.setText(o.getDescription());
+        oClient.setText(DbConnection.userDao.getUserById(o.getClientId()).toString());
+        oManager.setText(DbConnection.userDao.getUserById(o.getManagerId()).toString());
+        oPackage.setText(DbConnection.packageDao.getPackageById(o.getPaketId()).toString());
+        oDate.setText(o.getCreatedDate().toString());
+
+    }
+
+    private void showPackagesDetailedInfo(Package p){
+        pId.setText(""+p.getPackageId());
+        pName.setText(p.getName());
+        pDesc.setText(p.getDescription());
+        pPrice.setText(String.valueOf(p.getPrice()));
+        pDiscPrice.setText(String.valueOf(p.getDiscountPrice()));
+
+    }
+
+    private void showTasksDetailedInfo(Task t){
+        tId.setText(""+t.getTaskId());
+        tName.setText(t.getName());
+        tDesc.setText(t.getDescription());
+        tService.setText(DbConnection.serviceDao.getServiceById(t.getService()).toString());
+        tDate.setText(t.getCreatedDate().toString());
 
     }
 
 
-    //    private void showClientsOrders(User user){
-//        if (user != null){
-//            smsHandyTableView.setItems(main.getSmsHandyData().filtered(smsHandy -> smsHandy.getProvider().getName().equals(provider.getName())));
-//        }
-//        else {
-//            smsHandyTableView.setItems(null);
-//        }
-//    }
+    private void showClientsOrders(User user){
+        if (user != null){
+            //setText.setText(user.getId().toString())
+            orderTable.setItems(DbConnection.orderDao.getOrdersByClientId(user.getUserId()));
+
+        }
+        else {
+            orderTable.setItems(null);
+        }
+    }
 
 
     @FXML
     private void handleCreateOrder() {
-        Order selectedOrder = orderTable.getSelectionModel().getSelectedItem();
+//        Order selectedOrder = orderTable.getSelectionModel().getSelectedItem();
         try {
-            if (selectedOrder == null) {
+//            if (selectedOrder == null) {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("../view/CreateOrderDialog.fxml"));
                 AnchorPane page = loader.load();
@@ -190,7 +368,7 @@ public class MainController {
                 controller.setMain(this.main);
                 controller.setStage(dialogStage);
                 dialogStage.showAndWait();
-            }
+//            }
 
         } catch (IOException e) {
             alert("Etwas ist schief gelaufen.");
@@ -229,7 +407,7 @@ public class MainController {
         int selectedOrderIndex = orderTable.getSelectionModel().getSelectedIndex();
         if (selectedOrderIndex >= 0) {
             Order orderInOrderTv = orderTable.getItems().get(selectedOrderIndex);
-            orderDao.deleteOrderById(orderInOrderTv.getOrderId());
+            DbConnection.orderDao.deleteOrderById(orderInOrderTv.getOrderId());
             orders.remove(orderInOrderTv);
             orderTable.getSelectionModel().clearSelection();
         } else {
@@ -243,21 +421,21 @@ public class MainController {
     private void handleCreatePaket() {
         Package selectedPackage = packageTable.getSelectionModel().getSelectedItem();
         try {
-            if (selectedPackage == null) {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("../view/CreatePackageDialog.fxml"));
-                AnchorPane page = loader.load();
-                Stage dialogStage = new Stage();
-                dialogStage.setTitle("Paket erstellen");
-                dialogStage.initModality(Modality.WINDOW_MODAL);
-                dialogStage.initOwner(this.main.getPrimaryStage());
-                dialogStage.setScene(new Scene(page));
-                PackageController controller = loader.getController();
-                controller.setMain(this.main);
-                controller.setStage(dialogStage);
-                dialogStage.showAndWait();
-            }
+//            if (selectedPackage == null) {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("../view/CreatePackageDialog.fxml"));
+            AnchorPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Paket erstellen");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(this.main.getPrimaryStage());
+            dialogStage.setScene(new Scene(page));
+            PackageController controller = loader.getController();
+            controller.setMain(this.main);
+            controller.setStage(dialogStage);
+            dialogStage.showAndWait();
 
+//        }
         } catch (IOException e) {
             alert("Etwas ist schief gelaufen.");
             e.printStackTrace();
@@ -295,7 +473,7 @@ public class MainController {
         int selectedPackageIndex = packageTable.getSelectionModel().getSelectedIndex();
         if (selectedPackageIndex >= 0) {
             Package packageInPackageTv = packageTable.getItems().get(selectedPackageIndex);
-            packageDao.deletePackageById(packageInPackageTv.getPackageId());
+            DbConnection.packageDao.deletePackageById(packageInPackageTv.getPackageId());
             packages.remove(packageInPackageTv);
             packageTable.getSelectionModel().clearSelection();
         } else {
@@ -306,10 +484,10 @@ public class MainController {
 
     @FXML
     private void handleCreateService() {
-        Service selectedService = serviceTable.getSelectionModel().getSelectedItem();
+//        Service selectedService = serviceTable.getSelectionModel().getSelectedItem();
 //        Package selectedPackage = packageTable.getSelectionModel().getSelectedItem();
         try {
-            if (selectedService == null) {
+//            if (selectedService == null) {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("../view/CreateServiceDialog.fxml"));
                 AnchorPane page = loader.load();
@@ -322,7 +500,7 @@ public class MainController {
                 controller.setMain(this.main);
                 controller.setStage(dialogStage);
                 dialogStage.showAndWait();
-            }
+//            }
 
         } catch (IOException e) {
             alert("Etwas ist schief gelaufen.");
@@ -363,7 +541,7 @@ public class MainController {
 //        int selectedPackageIndex = packageTable.getSelectionModel().getSelectedIndex();
         if (selectedServiceIndex >= 0) {
             Service serviceInPackageTv = serviceTable.getItems().get(selectedServiceIndex);
-            serviceDao.deleteServiceById(serviceInPackageTv.getServiceId());
+            DbConnection.serviceDao.deleteServiceById(serviceInPackageTv.getServiceId());
             services.remove(serviceInPackageTv);
             serviceTable.getSelectionModel().clearSelection();
 //            Package packageInPackageTv = packageTable.getItems().get(selectedPackageIndex);
@@ -378,9 +556,9 @@ public class MainController {
 
     @FXML
     private void handleCreateTask() {
-        Task selectedTask = taskTable.getSelectionModel().getSelectedItem();
+//        Task selectedTask = taskTable.getSelectionModel().getSelectedItem();
         try {
-            if (selectedTask == null) {
+//            if (selectedTask == null) {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("../view/CreateTaskDialog.fxml"));
                 AnchorPane page = loader.load();
@@ -393,7 +571,7 @@ public class MainController {
                 controller.setMain(this.main);
                 controller.setStage(dialogStage);
                 dialogStage.showAndWait();
-            }
+//            }
 
         } catch (IOException e) {
             alert("Etwas ist schief gelaufen.");
@@ -432,7 +610,7 @@ public class MainController {
         int selectedTaskIndex = taskTable.getSelectionModel().getSelectedIndex();
         if (selectedTaskIndex >= 0) {
             Task taskInTaskTv = taskTable.getItems().get(selectedTaskIndex);
-            taskDao.deleteTaskById(taskInTaskTv.getTaskId());
+            DbConnection.taskDao.deleteTaskById(taskInTaskTv.getTaskId());
             tasks.remove(taskInTaskTv);
             taskTable.getSelectionModel().clearSelection();
         } else {
@@ -443,14 +621,14 @@ public class MainController {
 
     @FXML
     private void handleCreateUser() {
-        User selectedUser = userTable.getSelectionModel().getSelectedItem();
+//        User selectedUser = userTable.getSelectionModel().getSelectedItem();
         try {
-            if (selectedUser == null) {
+//            if (selectedUser == null) {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("../view/CreateUserDialog.fxml"));
                 AnchorPane page = loader.load();
                 Stage dialogStage = new Stage();
-                dialogStage.setTitle("User erstellen");
+                dialogStage.setTitle("Benutzer erstellen");
                 dialogStage.initModality(Modality.WINDOW_MODAL);
                 dialogStage.initOwner(this.main.getPrimaryStage());
                 dialogStage.setScene(new Scene(page));
@@ -458,7 +636,7 @@ public class MainController {
                 controller.setMain(this.main);
                 controller.setStage(dialogStage);
                 dialogStage.showAndWait();
-            }
+//            }
 
         } catch (IOException e) {
             alert("Etwas ist schief gelaufen.");
@@ -475,7 +653,7 @@ public class MainController {
             AnchorPane page = null;
             page = loader.load();
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("User bearbeiten");
+            dialogStage.setTitle("Benutzer bearbeiten");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(this.main.getPrimaryStage());
             dialogStage.setScene(new Scene(page));
@@ -494,12 +672,32 @@ public class MainController {
         int selectedUserIndex = userTable.getSelectionModel().getSelectedIndex();
         if (selectedUserIndex >= 0) {
             User userInUserTv = userTable.getItems().get(selectedUserIndex);
-            userDao.deleteUserById(userInUserTv.getUserId());
+            DbConnection.userDao.deleteUserById(userInUserTv.getUserId());
             users.remove(userInUserTv);
             userTable.getSelectionModel().clearSelection();
         } else {
             alert("Bitte wählen Sie in der Tabelle einen Benutzer aus.");
         }
+    }
+
+
+    @FXML
+    public void handleSearchUser() {
+        try {
+
+//            OperatingEnvironment operatingEnvironment = (OperatingEnvironment) operatingEnvironmentToggleGroup.getSelectedToggle().getUserData();
+//            int requiredDistance = Integer.parseInt(minDistanceRequiredField.getText());
+//            String uname = searchusername.getText();
+//            userTable.setItems(DbConnection.userDao.getUsersByName(uname));
+//            ObservableList<VehicleBindingAdapter> matchedVehiclesBindingAdapters = FXCollections.observableArrayList();
+//            vehicleManagement.findMatchingVehicles(requiredDistance, operatingEnvironment).forEach(vehicle ->
+//                    matchedVehiclesBindingAdapters.add(vehicle.getVehicleBindingAdapter()));
+//            vehicleTable.setItems(matchedVehiclesBindingAdapters);
+        } catch (NullPointerException e) {
+            alert("Nicht gefunden");
+            e.printStackTrace();
+        }
+
     }
 
     public static ObservableList<User> getUsers() {
@@ -529,15 +727,13 @@ public class MainController {
         packageTable.setItems(packages);
         serviceTable.setItems(services);
         taskTable.setItems(tasks);
-    }
 
-//    public static void infoBox(String msg, String text, String title) {
-//        Alert alert = new Alert(Alert.AlertType.ERROR);
-//        alert.setContentText(msg);
-//        alert.setTitle(title);
-//        alert.setHeaderText(text);
-//        alert.showAndWait();
-//    }
+//        userTable.setItems(DbConnection.userDao.getUsers());
+//        orderTable.setItems(DbConnection.orderDao.getOrders());
+//        packageTable.setItems(DbConnection.packageDao.getPackages());
+//        serviceTable.setItems(DbConnection.serviceDao.getServices());
+//        taskTable.setItems(DbConnection.taskDao.getTasks());
+    }
 
     private void alert(String text) {
         Alert alert = new Alert(

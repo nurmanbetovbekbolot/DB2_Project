@@ -21,11 +21,13 @@
                         <Insets bottom="12.0" />
                     </VBox.margin></TextField>
 
+                <Label text="Bezeichnung" />
                 <TextArea fx:id="taskDescriptionTextField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="270.0" promptText="###" style="-fx-background-color: #fff; -fx-border-style: solid; -fx-border-radius: 3; -fx-border-color: #C7C7C7;">
                     <VBox.margin>
                         <Insets bottom="12.0" />
                     </VBox.margin></TextArea>
 
+                <Label text="Dienst" />
                 <ChoiceBox fx:id="taskServiceChoiceBox" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="286.0" style="-fx-background-color: #fff; -fx-border-radius: 3; -fx-border-style: solid; -fx-border-color: #C7C7C7;">
                     <VBox.margin>
                         <Insets bottom="12.0" />

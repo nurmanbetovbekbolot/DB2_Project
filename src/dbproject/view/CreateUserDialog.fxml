@@ -36,6 +36,13 @@
                         <Insets bottom="12.0" />
                     </VBox.margin>
                 </TextField>
+                <Label text="Role" />
+                <ChoiceBox fx:id="userRoleChoiceBox" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="286.0" style="-fx-background-color: #fff; -fx-border-radius: 3; -fx-border-style: solid; -fx-border-color: #C7C7C7;">
+                    <VBox.margin>
+                        <Insets bottom="12.0" />
+                    </VBox.margin>
+                </ChoiceBox>
+
                 <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleCreateUserButton" prefHeight="25.0" prefWidth="282.0" text="Neuer Benutzer anlegen" textAlignment="CENTER">
                     <VBox.margin>
                         <Insets top="12.0" />

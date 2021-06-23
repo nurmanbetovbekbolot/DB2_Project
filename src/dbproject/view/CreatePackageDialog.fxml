@@ -30,7 +30,7 @@
                         <Insets bottom="12.0" />
                     </VBox.margin>
                 </TextField>
-                <Label text="Discount Preis" />
+                <Label text="Discount" />
                 <TextField fx:id="packageDiscountPriceTextField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="286.0" style="-fx-background-color: #fff; -fx-border-radius: 3; -fx-border-style: solid; -fx-border-color: #C7C7C7;">
                     <VBox.margin>
                         <Insets bottom="12.0" />

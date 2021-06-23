@@ -66,4 +66,9 @@ public class Package {
     public void setDiscountPrice(BigDecimal discountPrice) {
         this.discountPrice = discountPrice.doubleValue();
     }
+
+    @Override
+    public String toString() {
+        return name+" "+price+" "+discountPrice;
+    }
 }

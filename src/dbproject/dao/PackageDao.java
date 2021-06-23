@@ -8,12 +8,21 @@ import javafx.collections.ObservableList;
 import java.math.BigDecimal;
 import java.sql.*;
 
-public class PackageDao {
+public class PackageDao extends DbConnection{
+    private DbConnection dbConnection;
+
+    public PackageDao(String url) {
+        super(url);
+//        this.dbConnection = new DbConnection(url);
+    }
+
+//    public PackageDao() {
+//    }
 
     public ObservableList<Package> getPackages() {
         ObservableList<Package> packages = FXCollections.observableArrayList();
         String SQL = "select * from paket ";
-        try (Connection conn = DbConnection.connect("kunde", "1");
+        try (Connection conn = connect() ;
              Statement statement = conn.createStatement();
              ResultSet rs = statement.executeQuery(SQL)) {
             while (rs.next()) {
@@ -32,8 +41,8 @@ public class PackageDao {
     }
 
     public Package getPackageById(int id) {
-        String SQL = "select * from paket where id = ? ";
-        try (Connection conn = DbConnection.connect(null, null);
+        String SQL = "select * from paket where paketnr = ? ";
+        try (Connection conn = connect() ;
              PreparedStatement statement = conn.prepareStatement(SQL)) {
             statement.setInt(1, id);
             try (ResultSet rs = statement.executeQuery()) {
@@ -55,12 +64,12 @@ public class PackageDao {
 
     public Package createPackage(Package p) {
         String SQL = "insert into paket(name, bezeichnung, preis,discountpreis) values (?, ?, ?, ?)";
-        try (Connection conn = DbConnection.connect("sa","123");
+        try (Connection conn = connect() ;
              PreparedStatement statement = conn.prepareStatement(SQL)) {
             statement.setString(1, p.getName());
             statement.setString(2, p.getDescription());
-            statement.setBigDecimal(3,BigDecimal.valueOf(p.getPrice()));
-            statement.setBigDecimal(4,BigDecimal.valueOf(p.getDiscountPrice()));
+            statement.setBigDecimal(3, BigDecimal.valueOf(p.getPrice()));
+            statement.setBigDecimal(4, BigDecimal.valueOf(p.getDiscountPrice()));
             statement.executeUpdate();
             return p;
         } catch (SQLException e) {
@@ -71,7 +80,7 @@ public class PackageDao {
 
     public Package updatePackage(Package p) {
         String SQL = "update paket set name=?, bezeichnung=?, preis=?, discountpreis=? where paketnr = ?";
-        try (Connection conn = DbConnection.connect("sa", "123");
+        try (Connection conn = connect() ;
              PreparedStatement statement = conn.prepareStatement(SQL)) {
             statement.setString(1, p.getName());
             statement.setString(2, p.getDescription());
@@ -88,7 +97,7 @@ public class PackageDao {
 
     public boolean deletePackageById(int id) {
         String SQL = "delete from paket where paketnr = ?";
-        try (Connection conn = DbConnection.connect("sa", "123");
+        try (Connection conn = connect() ;
              PreparedStatement statement = conn.prepareStatement(SQL)) {
             statement.setInt(1, id);
             statement.executeUpdate();

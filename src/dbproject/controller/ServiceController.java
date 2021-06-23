@@ -2,6 +2,7 @@ package dbproject.controller;
 
 import dbproject.Main;
 import dbproject.dao.ServiceDao;
+import dbproject.db.DbConnection;
 import dbproject.dto.Service;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -12,7 +13,7 @@ import javafx.stage.Stage;
 public class ServiceController {
     private Main main;
     private Stage stage;
-    private ServiceDao serviceDao;
+//    private ServiceDao serviceDao;
     private Service editedService;
 //    private Package editedPackage;
 
@@ -25,10 +26,13 @@ public class ServiceController {
     private void initialize() {
     }
 
-    public ServiceController() {
-        this.serviceDao = new ServiceDao();
-    }
+//    public ServiceController() {
+//        this.serviceDao = new ServiceDao();
+//    }
 
+//    public ServiceController(String url) {
+//        this.serviceDao = new ServiceDao(url);
+//    }
     @FXML
     private void handleCreateServiceButton() {
         String message = checkServiceData();
@@ -37,7 +41,7 @@ public class ServiceController {
             return;
         }
 //        Package p = packageDao.createPackage(new Package(packageNameTextField.getText(), packageDescriptionTextField.getText(), Double.parseDouble(packagePriceTextField.getText()), Double.parseDouble(packageDiscountPriceTextField.getText())));
-        Service s = serviceDao.createService(new Service(serviceNameTextField.getText()));
+        Service s = DbConnection.serviceDao.createService(new Service(serviceNameTextField.getText()));
         MainController.getServices().add(s);
 
         alert("Dienst erfolgreich angelegt!");
@@ -52,7 +56,7 @@ public class ServiceController {
 //            Package p = new Package(editedPackage.getPackageId(),packageNameTextField.getText(),packageDescriptionTextField.getText(),Double.parseDouble(packagePriceTextField.getText()),Double.parseDouble(packageDiscountPriceTextField.getText()));
 //            packageDao.updatePackage(p);
             Service s = new Service(editedService.getServiceId(),serviceNameTextField.getText());
-            serviceDao.updateService(s);
+            DbConnection.serviceDao.updateService(s);
             MainController.getServices().remove(editedService);
             MainController.getServices().add(s);
             alert("Dienst erfolgreich bearbeitet!");
@@ -80,7 +84,7 @@ public class ServiceController {
         String message = "";
         if (serviceNameTextField.getText().isBlank())
             return "Feld kann nicht leer sein!";
-        for (Service s : serviceDao.getServices()) {
+        for (Service s : DbConnection.serviceDao.getServices()) {
             if (s.getName().equals(serviceNameTextField.getText())) return "Dieser datei ist besetzt";
         }
         return message;

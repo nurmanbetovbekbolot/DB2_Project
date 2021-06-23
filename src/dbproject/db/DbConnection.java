@@ -1,26 +1,78 @@
 package dbproject.db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+import dbproject.controller.LoginController;
+import dbproject.dao.*;
+import dbproject.exception.WrongCredentialsException;
+import dbproject.model.UserModel;
 
-public class DbConnection {
-    private static final String url = "jdbc:sqlserver://127.0.0.1:1433;databaseName=CRM_System";
-//    private static final String Connection conn = DbConnection.connect(null,null);user = "sa";
-//    private static final String password = "123";
+import java.sql.*;
 
-    public static Connection connect(String user, String password) {
-//        DatabaseConnection databaseConnection;
-//        String username=(user==null)?"sa":user;
-//        String pass=(password==null)?"123":password;
+public abstract class DbConnection {
+    private final String url;
+    private static final String host = "127.0.0.1";
+    private static final String port = "1433";
+    private static final String database = "CRM_DB";
+    public static UserDao userDao;
+    public static OrderDao orderDao;
+    public static PackageDao packageDao;
+    public static ServiceDao serviceDao;
+    public static TaskDao taskDao;
+    public static UserModel loggedInUser;
+//    public static UserModel loggedInUserRole;
+
+    public DbConnection(String url) {
+        this.url = url;
+    }
+
+    public Connection connect() throws SQLException {
         Connection conn = null;
         try {
-//            databaseConnection = new DatabaseConnection();
-            conn = DriverManager.getConnection(url,user,password);
-            System.out.println("Connected successfully");
+            DriverManager.registerDriver(new SQLServerDriver());
+            conn = DriverManager.getConnection(this.url);
+
+            System.out.println("Connected successfully!");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("rtgtedhnfbv");
+            throw new WrongCredentialsException("Bitte geben Sie die richtigen Anmeldedaten ein");
         }
         return conn;
     }
+
+    public static void initialize(String username, String password) throws SQLException {
+
+        String connUrl = "jdbc:sqlserver://" + host + ":" + port +
+                ";databaseName=" + database + ";user=" + username + ";password=" + password + ";";
+        getCurUser(connUrl);
+        String a = getCurUser(connUrl);
+//        String b=getCurUserRole(connUrl,a);
+        System.out.println("MyUser :" + a);
+//        System.out.println("MyRole"+b);
+        userDao = new UserDao(connUrl);
+        orderDao = new OrderDao(connUrl);
+        packageDao = new PackageDao(connUrl);
+        serviceDao = new ServiceDao(connUrl);
+        taskDao = new TaskDao(connUrl);
+        loggedInUser = userDao.getCurUserRole(connUrl, a);
+        System.out.println(loggedInUser);
+    }
+
+    public static String getCurUser(String url) throws SQLException {
+        Connection conn = null;
+
+        DriverManager.registerDriver(new SQLServerDriver());
+        conn = DriverManager.getConnection(url);
+        String SQL = "select SYSTEM_USER";
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(SQL);
+        if (rs.next()) {
+            return rs.getString("");
+        }
+        return "";
+    }
+
+
+    // Create an instance of a TestRepo and try to get connection
+//        testRepo = new TestRepo(connUrl);
+//        System.out.println("LOGGED IN AS: " + testRepo.getLoginData());
 }

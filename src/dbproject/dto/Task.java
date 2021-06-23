@@ -72,4 +72,15 @@ public class Task {
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "taskId=" + taskId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", service=" + service +
+                ", createdDate=" + createdDate +
+                '}';
+    }
 }

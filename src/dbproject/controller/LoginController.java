@@ -4,7 +4,6 @@ import dbproject.Main;
 import dbproject.db.DbConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,15 +15,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
 
-public class LoginController {
+public class LoginController{
 
     private Main main;
 
@@ -40,12 +37,13 @@ public class LoginController {
     @FXML
     private Button btnSignin;
 
-    /// -- 
-    Connection con = null;
+
+    private Connection conn;
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
 
 //    public String login = txtUsername.getText();
+
 
     @FXML
     public void handleButtonAction(MouseEvent event) {
@@ -53,22 +51,48 @@ public class LoginController {
         if (event.getSource() == btnSignin) {
             //login here
             if (logIn().equals("Success")) {
+                String pathToView;
                 try {
+
+                        switch (DbConnection.loggedInUser.getRole()) {
+                            case "ADMIN":
+                                pathToView = "../view/Main.fxml";
+
+                                break;
+                            case "MANAGER":
+                                pathToView = "../view/Manager.fxml";
+                                break;
+                            case "CLIENT":
+                                pathToView = "../view/Client.fxml";
+                                break;
+                            default:
+                                pathToView = "../view/Login.fxml";
+                        }
 
                     Node node = (Node) event.getSource();
                     Stage stage = (Stage) node.getScene().getWindow();
                     //stage.setMaximized(true);
                     stage.close();
                     FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(getClass().getResource("../view/Main.fxml"));
+                    loader.setLocation(getClass().getResource(pathToView));
                     Parent parent = loader.load();
                     Scene scene = new Scene(parent);
                     stage.setScene(scene);
                     stage.show();
-                    MainController moc = loader.getController();
-                    moc.setMain(main);
+                    if (DbConnection.loggedInUser.getRole().equals("CLIENT")) {
+                        ClientController moc = loader.getController();
+                        moc.setMain(main);
+//                        .setTitle("MAKK | " + authUserRole + " | " + emailTextField.getText());
+
+                    }
+                    else if (DbConnection.loggedInUser.getRole().equals("ADMIN")){
+                        MainController moc = loader.getController();
+                        moc.setMain(main);
+                    }
+
 
                 } catch (IOException ex) {
+                    System.out.println("getu");
                     System.err.println(ex.getMessage());
                 }
 
@@ -78,9 +102,10 @@ public class LoginController {
 
 
 
+
 //    @Override
 //    public void initialize(URL url, ResourceBundle rb) {
-//        if (con == null) {
+//        if (conn == null) {
 //            lblErrors.setTextFill(Color.TOMATO);
 //            lblErrors.setText("Server Error : Check");
 //        } else {
@@ -88,13 +113,13 @@ public class LoginController {
 //            lblErrors.setText("Server is up : Good to go");
 //        }
 //    }
-
-//    public LoginController() {
-//        con = DbConnection.connect(null,null);
+//
+//    public LoginController() throws SQLException {
+//        conn = dbConnection.connect();
 //    }
 
     //we gonna use string to check for status
-    private String logIn() {
+    private String logIn(){
         String status = "Success";
         String login = txtUsername.getText();
         String password = txtPassword.getText();
@@ -103,27 +128,36 @@ public class LoginController {
             status = "Error";
         } else {
             //query
-            String sql = "SELECT * FROM benutzer WHERE benutzer_name = ? and password = ?";
+//            String sql = "SELECT * FROM benutzer WHERE benutzer_name = ? and password = ?";
             try {
-                con = DbConnection.connect(login,password);
-                if (con==null)
-                    setLblError(Color.TOMATO, "Enter Correct Email/Password");
-                preparedStatement = con.prepareStatement(sql);
-                preparedStatement.setString(1, login);
-                preparedStatement.setString(2, password);
-                resultSet = preparedStatement.executeQuery();
-                 if (!resultSet.next()) {
-                    setLblError(Color.TOMATO, "Enter Correct Email/Password");
-                    status = "Error";
-                } else {
-                    setLblError(Color.GREEN, "Login Successful..Redirecting..");
-                }
-            } catch (SQLException ex) {
-                System.err.println(ex.getMessage());
-                status = "Exception";
+            DbConnection.initialize(login, password);
+
             }
+            catch (SQLException e){
+             setLblError(Color.TOMATO,"Enter correct credentials");
+                status = "Error";
+
+            }
+
+//            if (conn == null)
+//                setLblError(Color.TOMATO, "Enter Correct Email/Password");
+//            try (Connection conn = dbConnection.connect() ;
+//                 PreparedStatement statement = conn.prepareStatement(sql)) {
+//
+//            preparedStatement.setString(1, login);
+//            preparedStatement.setString(2, password);
+//            resultSet = preparedStatement.executeQuery();
+//            if (!resultSet.next()) {
+//                if () {
+//                    setLblError(Color.TOMATO, "Enter Correct Email/Password");
+//                    status = "Error";
+//                } else {
+//                    setLblError(Color.GREEN, "Login Successful..Redirecting..");
+//                }
+//            } catch (SQLException throwables) {
+//                throwables.printStackTrace();
+//            }
         }
-        
         return status;
     }
     
@@ -136,4 +170,5 @@ public class LoginController {
     public void setMain(Main main) {
         this.main = main;
     }
+
 }

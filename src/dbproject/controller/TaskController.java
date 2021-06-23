@@ -2,6 +2,7 @@ package dbproject.controller;
 
 import dbproject.Main;
 import dbproject.dao.TaskDao;
+import dbproject.db.DbConnection;
 import dbproject.dto.Package;
 import dbproject.dto.Service;
 import dbproject.dto.Task;
@@ -13,7 +14,7 @@ import javafx.util.StringConverter;
 public class TaskController {
     private Main main;
     private Stage stage;
-    private TaskDao taskDao;
+//    private TaskDao taskDao;
     private Task editedTask;
 
 
@@ -41,9 +42,13 @@ public class TaskController {
         });
     }
 
-    public TaskController() {
-        this.taskDao = new TaskDao();
-    }
+//    public TaskController() {
+//        this.taskDao = new TaskDao();
+//    }
+
+//    public TaskController(String url) {
+//        this.taskDao = new TaskDao(url);
+//    }
 
     @FXML
     private void handleCreateTaskButton() {
@@ -52,7 +57,7 @@ public class TaskController {
             alert(message);
             return;
         }
-        Task t = taskDao.createTask(new Task(taskNameTextField.getText(), taskDescriptionTextField.getText(), taskServiceChoiceBox.getValue().getServiceId()));
+        Task t = DbConnection.taskDao.createTask(new Task(taskNameTextField.getText(), taskDescriptionTextField.getText(), taskServiceChoiceBox.getValue().getServiceId()));
         MainController.getTasks().add(t);
         alert("Aufgabe erfolgreich angelegt!");
         stage.close();
@@ -64,7 +69,7 @@ public class TaskController {
         String message = checkTaskData();
         if (message.equals("")) {
             Task t = new Task(editedTask.getTaskId(), taskNameTextField.getText(), taskDescriptionTextField.getText(), taskServiceChoiceBox.getValue().getServiceId());
-            taskDao.updateTask(t);
+            DbConnection.taskDao.updateTask(t);
             MainController.getTasks().remove(editedTask);
             MainController.getTasks().add(t);
             alert("Aufgabe erfolgreich bearbeitet!");
