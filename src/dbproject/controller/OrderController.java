@@ -14,6 +14,7 @@ public class OrderController {
     private Main main;
     private Stage stage;
     private Order editedOrder;
+    private Order selectedOrder;
 
 
     @FXML
@@ -186,6 +187,11 @@ public class OrderController {
         MainController.getPackages().forEach(p -> orderPackageChoiceBox.getItems().add(p));
         orderPackageChoiceBox.setValue(orderPackageChoiceBox.getItems().get(0));
 
+    }
+
+    public void setSelectedOrder(Order o) {
+        this.selectedOrder = o;
+//        numberLabel.setText(selectedSmsHandy.getNumber()+" | "+selectedSmsHandy.getClass().getSimpleName()+" | "+selectedSmsHandy.getProvider().getName());
     }
 
     public void setStage(Stage stage) {

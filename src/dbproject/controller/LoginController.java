@@ -60,7 +60,7 @@ public class LoginController{
 
                                 break;
                             case "MANAGER":
-                                pathToView = "../view/Manager.fxml";
+                                pathToView = "../view/Main.fxml";
                                 break;
                             case "CLIENT":
                                 pathToView = "../view/Client.fxml";

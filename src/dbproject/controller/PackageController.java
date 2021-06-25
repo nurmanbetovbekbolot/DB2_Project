@@ -1,20 +1,20 @@
 package dbproject.controller;
 
 import dbproject.Main;
-import dbproject.dao.PackageDao;
 import dbproject.db.DbConnection;
 import dbproject.dto.Package;
+import dbproject.dto.Service;
+import dbproject.dto.Task;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+
+import java.util.Date;
 
 public class PackageController {
     private Main main;
     private Stage stage;
-//    private PackageDao packageDao;
+    private Package selectedPackage;
     private Package editedPackage;
 
 
@@ -30,20 +30,6 @@ public class PackageController {
     @FXML
     private TextField packageDiscountPriceTextField;
 
-
-    @FXML
-    private void initialize() {
-    }
-
-//    public PackageController() {
-//        this.packageDao = new PackageDao();
-//    }
-
-//    public PackageController(String url) {
-//        this.packageDao = new PackageDao(url);
-//    }
-
-
     @FXML
     private void handleCreatePackageButton() {
         String message = checkPackageData();
@@ -53,7 +39,7 @@ public class PackageController {
         }
         Package p = DbConnection.packageDao.createPackage(new Package(packageNameTextField.getText(), packageDescriptionTextField.getText(), Double.parseDouble(packagePriceTextField.getText()), Double.parseDouble(packageDiscountPriceTextField.getText())));
 
-        MainController.getPackages().add(p);
+        MainController.getPackages().add(DbConnection.packageDao.getPackageByName(packageNameTextField.getText()));
 
         alert("Paket erfolgreich angelegt!");
         stage.close();
@@ -101,15 +87,18 @@ public class PackageController {
                 return "Zahl sollte vom Typ Nummer sein!";
             }
         }
-//        for (Package pe : packageDao.getPackages()) {
-//            if (pe.getName().equals(packageNameTextField.getText())) return "Dieser datei ist besetzt";
-//        }
         return message;
+    }
+
+    public void setSelectedPackage(Package p) {
+        this.selectedPackage = p;
     }
 
     public void setMain(Main main) {
         this.main = main;
     }
+
+
 
     public void setMain(Main main, Package p) {
         this.main = main;
@@ -119,7 +108,6 @@ public class PackageController {
         packagePriceTextField.setText("" + p.getPrice());
         packageDiscountPriceTextField.setText("" + p.getDiscountPrice());
     }
-
 
     public void setStage(Stage stage) {
         this.stage = stage;

@@ -11,8 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<?import javafx.geometry.Insets?>
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dbproject.controller.MainController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dbproject.controller.ManagerController">
     <children>
         <TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
@@ -45,9 +44,6 @@
                                             <buttons>
                                                 <Button fx:id="deleteUserButton" mnemonicParsing="false" onAction="#handleDeleteUser" text="Benutzer löschen" />
                                             </buttons>
-                                            <BorderPane.margin>
-                                                <Insets left="15.0" right="15.0" />
-                                            </BorderPane.margin>
                                         </ButtonBar>
                                     </bottom>
                                     <center>
@@ -93,26 +89,20 @@
                                             </columns>
                                         </TableView>
                                     </left>
-                                    <bottom>
-                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                            <buttons>
-                                                <Button fx:id="toOrderButton" mnemonicParsing="false" onAction="#handleToOrder" text="Zum Bestellung" />
-                                            </buttons>
-                                            <buttons>
-                                                <Button fx:id="createOrderButton" mnemonicParsing="false" onAction="#handleCreateOrder" text="Bestellung erstellen" />
-                                            </buttons>
-                                            <buttons>
-                                                <Button fx:id="editOrderButton" mnemonicParsing="false" onAction="#handleEditOrder" text="Bestellung bearbeiten" />
-                                            </buttons>
+<!--                                    <bottom>-->
+<!--                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">-->
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="createOrderButton" mnemonicParsing="false" onAction="#handleCreateOrder" text="Bestellung erstellen" />-->
+<!--                                            </buttons>-->
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="editOrderButton" mnemonicParsing="false" onAction="#handleEditOrder" text="Bestellung bearbeiten" />-->
+<!--                                            </buttons>-->
 
-                                            <buttons>
-                                                <Button fx:id="deleteOrderButton" mnemonicParsing="false" onAction="#handleDeleteOrder" text="Bestellung löschen" />
-                                            </buttons>
-                                            <BorderPane.margin>
-                                                <Insets left="15.0" right="15.0" />
-                                            </BorderPane.margin>
-                                        </ButtonBar>
-                                    </bottom>
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="deleteOrderButton" mnemonicParsing="false" onAction="#handleDeleteOrder" text="Bestellung löschen" />-->
+<!--                                            </buttons>-->
+<!--                                        </ButtonBar>-->
+<!--                                    </bottom>-->
                                     <center>
                                         <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                             <content>
@@ -157,9 +147,6 @@
                                     <bottom>
                                         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                             <buttons>
-                                                <Button fx:id="toPaketButton" mnemonicParsing="false" onAction="#handleToPackage" text="Zum Paket"/>
-                                            </buttons>
-                                            <buttons>
                                                 <Button fx:id="createPaketButton" mnemonicParsing="false" onAction="#handleCreatePaket" text="Paket erstellen" />
                                             </buttons>
                                             <buttons>
@@ -169,26 +156,23 @@
                                             <buttons>
                                                 <Button fx:id="deletePaketButton" mnemonicParsing="false" onAction="#handleDeletePaket" text="Paket löschen" />
                                             </buttons>
-                                            <BorderPane.margin>
-                                                <Insets left="15.0" right="15.0" />
-                                            </BorderPane.margin>
                                         </ButtonBar>
                                     </bottom>
-                           <center>
-                              <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
-                                      <children>
-                                          <Label fx:id="pId" layoutX="24.0" layoutY="33.0" text="Label" />
-                                          <Label fx:id="pName" layoutX="24.0" layoutY="74.0" text="Label" />
-                                          <Label fx:id="pDesc" layoutX="24.0" layoutY="115.0" text="Label" />
-                                          <Label fx:id="pPrice" layoutX="24.0" layoutY="159.0" text="Label" />
-                                          <Label fx:id="pDiscPrice" layoutX="24.0" layoutY="202.0" text="Label" />
-                                      </children>
-                                  </AnchorPane>
-                                </content>
-                              </ScrollPane>
-                           </center>
+                                    <center>
+                                        <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                                                    <children>
+                                                        <Label fx:id="pId" layoutX="24.0" layoutY="33.0" text="Label" />
+                                                        <Label fx:id="pName" layoutX="24.0" layoutY="74.0" text="Label" />
+                                                        <Label fx:id="pDesc" layoutX="24.0" layoutY="115.0" text="Label" />
+                                                        <Label fx:id="pPrice" layoutX="24.0" layoutY="159.0" text="Label" />
+                                                        <Label fx:id="pDiscPrice" layoutX="24.0" layoutY="202.0" text="Label" />
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </ScrollPane>
+                                    </center>
                                 </BorderPane>
                             </children>
                         </AnchorPane>
@@ -206,7 +190,7 @@
                                                 <TableColumn fx:id="serviceIdColumn" prefWidth="75.0" text="Nr" />
 
                                                 <TableColumn fx:id="serviceNameColumn" prefWidth="75.0" text="Name" />
-<!--                                                <TableColumn fx:id="buttonColumn" prefWidth="75.0" text="Name"/>-->
+
                                             </columns>
                                         </TableView>
                                     </left>
@@ -222,9 +206,6 @@
                                             <buttons>
                                                 <Button fx:id="deleteServiceButton" mnemonicParsing="false" onAction="#handleDeleteService" text="Dienst löschen" />
                                             </buttons>
-                                            <BorderPane.margin>
-                                                <Insets left="15.0" right="15.0" />
-                                            </BorderPane.margin>
                                         </ButtonBar>
                                     </bottom>
                                 </BorderPane>
@@ -263,9 +244,6 @@
                                             <buttons>
                                                 <Button fx:id="deleteTaskButton" mnemonicParsing="false" onAction="#handleDeleteTask" text="Aufgabe löschen" />
                                             </buttons>
-                                            <BorderPane.margin>
-                                                <Insets left="15.0" right="15.0" />
-                                            </BorderPane.margin>
                                         </ButtonBar>
                                     </bottom>
                                     <center>
@@ -291,6 +269,5 @@
                 </Tab>
             </tabs>
         </TabPane>
-      <Button fx:id="logoutButton" onAction="#handleLogout" layoutY="2.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="73.0" text="Logout" AnchorPane.rightAnchor="1.0" />
     </children>
 </AnchorPane>

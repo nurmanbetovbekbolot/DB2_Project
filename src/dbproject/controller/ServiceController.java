@@ -13,9 +13,7 @@ import javafx.stage.Stage;
 public class ServiceController {
     private Main main;
     private Stage stage;
-//    private ServiceDao serviceDao;
     private Service editedService;
-//    private Package editedPackage;
 
 
     @FXML
@@ -26,13 +24,6 @@ public class ServiceController {
     private void initialize() {
     }
 
-//    public ServiceController() {
-//        this.serviceDao = new ServiceDao();
-//    }
-
-//    public ServiceController(String url) {
-//        this.serviceDao = new ServiceDao(url);
-//    }
     @FXML
     private void handleCreateServiceButton() {
         String message = checkServiceData();
@@ -40,7 +31,6 @@ public class ServiceController {
             alert(message);
             return;
         }
-//        Package p = packageDao.createPackage(new Package(packageNameTextField.getText(), packageDescriptionTextField.getText(), Double.parseDouble(packagePriceTextField.getText()), Double.parseDouble(packageDiscountPriceTextField.getText())));
         Service s = DbConnection.serviceDao.createService(new Service(serviceNameTextField.getText()));
         MainController.getServices().add(s);
 
@@ -53,8 +43,6 @@ public class ServiceController {
     private void handleEditServiceButton() {
         String message = checkServiceData();
         if (message.equals("")) {
-//            Package p = new Package(editedPackage.getPackageId(),packageNameTextField.getText(),packageDescriptionTextField.getText(),Double.parseDouble(packagePriceTextField.getText()),Double.parseDouble(packageDiscountPriceTextField.getText()));
-//            packageDao.updatePackage(p);
             Service s = new Service(editedService.getServiceId(),serviceNameTextField.getText());
             DbConnection.serviceDao.updateService(s);
             MainController.getServices().remove(editedService);
@@ -65,6 +53,20 @@ public class ServiceController {
             alert(message);
         }
     }
+
+//    @FXML
+//    private void handleAddServiceToPackageButton() {
+//        String message = checkServiceData();
+//        if (!message.equals("")) {
+//            alert(message);
+//            return;
+//        }
+//        Service s = DbConnection.serviceDao.createService(new Service(serviceNameTextField.getText()));
+//        MainController.getServices().add(s);
+//
+//        alert("Dienst erfolgreich angelegt!");
+//        stage.close();
+//    }
 
     @FXML
     private void handleCancelButton() {

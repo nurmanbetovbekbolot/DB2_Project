@@ -40,11 +40,56 @@ public class PackageDao extends DbConnection{
         return packages;
     }
 
+    public ObservableList<Package> getPackagesInOrder(int id) {
+        ObservableList<Package> packages = FXCollections.observableArrayList();
+        String SQL = "select * from paket p join bestellung b on p.paketnr=b.paket where b.bestellungnr=? ";
+        try (Connection conn = connect() ;
+             PreparedStatement statement = conn.prepareStatement(SQL)) {
+            statement.setInt(1, id);
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    Package p = new Package();
+                    p.setPackageId(rs.getInt("paketnr"));
+                    p.setName(rs.getString("name"));
+                    p.setDescription(rs.getString("bezeichnung"));
+                    p.setPrice(rs.getBigDecimal("preis"));
+                    p.setDiscountPrice(rs.getBigDecimal("discountpreis"));
+                    packages.add(p);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return packages;
+    }
+
     public Package getPackageById(int id) {
         String SQL = "select * from paket where paketnr = ? ";
         try (Connection conn = connect() ;
              PreparedStatement statement = conn.prepareStatement(SQL)) {
             statement.setInt(1, id);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    Package p = new Package();
+                    p.setPackageId(rs.getInt("paketnr"));
+                    p.setName(rs.getString("name"));
+                    p.setDescription(rs.getString("bezeichnung"));
+                    p.setPrice(rs.getBigDecimal("preis"));
+                    p.setDiscountPrice(rs.getBigDecimal("discountpreis"));
+                    return p;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Package getPackageByName(String name) {
+        String SQL = "select * from paket where name = ? ";
+        try (Connection conn = connect() ;
+             PreparedStatement statement = conn.prepareStatement(SQL)) {
+            statement.setString(1, name);
             try (ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {
                     Package p = new Package();

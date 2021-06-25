@@ -58,7 +58,7 @@ public class TaskController {
             return;
         }
         Task t = DbConnection.taskDao.createTask(new Task(taskNameTextField.getText(), taskDescriptionTextField.getText(), taskServiceChoiceBox.getValue().getServiceId()));
-        MainController.getTasks().add(t);
+        MainController.getTasks().add(DbConnection.taskDao.getTaskByName(taskNameTextField.getText()));
         alert("Aufgabe erfolgreich angelegt!");
         stage.close();
     }

@@ -14,7 +14,7 @@
         <VBox prefHeight="313.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <Label text="Name" />
-                <TextField fx:id="serviceNameTextField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="270.0" promptText="###" style="-fx-background-color: #fff; -fx-border-style: solid; -fx-border-radius: 3; -fx-border-color: #C7C7C7;">
+                <TextField fx:id="serviceNameTextField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="270.0" promptText="Name" style="-fx-background-color: #fff; -fx-border-style: solid; -fx-border-radius: 3; -fx-border-color: #C7C7C7;">
                     <VBox.margin>
                         <Insets bottom="12.0" />
                     </VBox.margin></TextField>

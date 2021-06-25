@@ -12,52 +12,103 @@
                     <content>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                             <children>
-                                <BorderPane prefHeight="571.2" prefWidth="800.0" AnchorPane.bottomAnchor="0.0"
-                                            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                            AnchorPane.topAnchor="0.0">
+                                <BorderPane prefHeight="571.2" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <left>
-                                        <TableView fx:id="orderTable" prefHeight="571.2" prefWidth="800.0"
-                                                   BorderPane.alignment="CENTER">
+                                        <TableView fx:id="orderTable" prefHeight="531.0" prefWidth="534.0" BorderPane.alignment="CENTER">
                                             <columns>
-                                                <TableColumn fx:id="orderNameColumn" prefWidth="75.0" text="Name"/>
-                                                <TableColumn fx:id="orderDescriptionColumn" prefWidth="75.0"
-                                                             text="Bezeihnung"/>
-                                                <TableColumn fx:id="orderClientColumn" prefWidth="75.0" text="Kunde"/>
-                                                <TableColumn fx:id="orderManagerColumn" prefWidth="119.20001220703125"
-                                                             text="Manager"/>
+                                                <TableColumn fx:id="orderIdColumn" prefWidth="20.0" text="Nr" />
+                                                <TableColumn fx:id="orderNameColumn" prefWidth="124.79998779296875" text="Name" />
+                                                <TableColumn fx:id="orderDescriptionColumn" prefWidth="186.4000244140625" text="Bezeihnung" />
+                                                <TableColumn fx:id="orderClientColumn" prefWidth="62.39996337890625" text="Kunde" />
+                                                <TableColumn fx:id="orderManagerColumn" prefWidth="59.20001220703125" text="Manager" />
 
-                                                <TableColumn fx:id="orderPackageColumn" prefWidth="119.20001220703125"
-                                                             text="Paket"/>
-                                                <TableColumn fx:id="orderCreatedAtColumn" prefWidth="119.20001220703125"
-                                                             text="Erstellt_am"/>
+                                                <TableColumn fx:id="orderPackageColumn" prefWidth="76.79998779296875" text="Paket" />
+                                                <TableColumn fx:id="orderCreatedAtColumn" prefWidth="139.20001220703125" text="Erstellt_am" />
                                             </columns>
                                         </TableView>
                                     </left>
-                                    <bottom>
-                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+<!--                                    <bottom>-->
+<!--                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">-->
 <!--                                            <buttons>-->
-<!--                                                <Button mnemonicParsing="false" onAction="#handleSearchVehicleButton"-->
-<!--                                                        prefWidth="150.0" text="Suche ausführen" GridPane.rowIndex="3">-->
-<!--                                                    <GridPane.margin>-->
-<!--                                                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>-->
-<!--                                                    </GridPane.margin>-->
-<!--                                                </Button>-->
+<!--                                                <Button fx:id="createOrderButton" mnemonicParsing="false" onAction="#handleCreateOrder" text="Bestellung erstellen" />-->
 <!--                                            </buttons>-->
-                                            <!--                                            <buttons>-->
-                                            <!--                                                <Button fx:id="createOrderButton" onAction="#handleCreateOrder"-->
-                                            <!--                                                        mnemonicParsing="false" text="Bestellung erstellen"/>-->
-                                            <!--                                            </buttons>-->
-                                            <!--                                            <buttons>-->
-                                            <!--                                                <Button fx:id="editOrderButton" onAction="#handleEditOrder"-->
-                                            <!--                                                        mnemonicParsing="false" text="Bestellung bearbeiten"/>-->
-                                            <!--                                            </buttons>-->
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="editOrderButton" mnemonicParsing="false" onAction="#handleEditOrder" text="Bestellung bearbeiten" />-->
+<!--                                            </buttons>-->
 
-                                            <!--                                            <buttons>-->
-                                            <!--                                                <Button fx:id="deleteOrderButton" onAction="#handleDeleteOrder"-->
-                                            <!--                                                        mnemonicParsing="false" text="Bestellung löschen"/>-->
-                                            <!--                                            </buttons>-->
-                                        </ButtonBar>
-                                    </bottom>
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="deleteOrderButton" mnemonicParsing="false" onAction="#handleDeleteOrder" text="Bestellung löschen" />-->
+<!--                                            </buttons>-->
+<!--                                        </ButtonBar>-->
+<!--                                    </bottom>-->
+                                    <center>
+                                        <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="403.0" prefWidth="300.0">
+                                                    <children>
+                                                        <Label fx:id="oId" layoutX="24.0" layoutY="33.0" text="Label" />
+                                                        <Label fx:id="oName" layoutX="24.0" layoutY="74.0" text="Label" />
+                                                        <Label fx:id="oDesc" layoutX="24.0" layoutY="115.0" text="Label" />
+                                                        <Label fx:id="oClient" layoutX="24.0" layoutY="159.0" text="Label" />
+                                                        <Label fx:id="oManager" layoutX="24.0" layoutY="202.0" text="Label" />
+                                                        <Label fx:id="oPackage" layoutX="24.0" layoutY="248.0" text="Label" />
+                                                        <Label fx:id="oDate" layoutX="24.0" layoutY="288.0" text="Label" />
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </ScrollPane>
+                                    </center>
+                                </BorderPane>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Paket">
+                    <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                                <BorderPane prefHeight="571.2" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <left>
+                                        <TableView fx:id="packageTable" prefHeight="531.0" prefWidth="478.0" BorderPane.alignment="CENTER">
+                                            <columns>
+                                                <TableColumn fx:id="packageIdColumn" prefWidth="27.20001220703125" text="Nr" />
+                                                <TableColumn fx:id="packageNameColumn" prefWidth="82.4000244140625" text="Name" />
+                                                <TableColumn fx:id="descriptionColumn" prefWidth="170.39996337890625" text="Bezeihnung" />
+                                                <TableColumn fx:id="preisColumn" prefWidth="75.20001220703125" text="Preis" />
+                                                <TableColumn fx:id="discountPreisColumn" prefWidth="121.60003662109375" text="Discount Preis" />
+                                            </columns>
+                                        </TableView>
+                                    </left>
+
+<!--                                    <bottom>-->
+<!--                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">-->
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="createPaketButton" mnemonicParsing="false" onAction="#handleCreatePaket" text="Paket erstellen" />-->
+<!--                                            </buttons>-->
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="editPaketButton" mnemonicParsing="false" onAction="#handleEditPaket" text="Paket bearbeiten" />-->
+<!--                                            </buttons>-->
+
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="deletePaketButton" mnemonicParsing="false" onAction="#handleDeletePaket" text="Paket löschen" />-->
+<!--                                            </buttons>-->
+<!--                                        </ButtonBar>-->
+<!--                                    </bottom>-->
+                                    <center>
+                                        <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                                                    <children>
+                                                        <Label fx:id="pId" layoutX="24.0" layoutY="33.0" text="Label" />
+                                                        <Label fx:id="pName" layoutX="24.0" layoutY="74.0" text="Label" />
+                                                        <Label fx:id="pDesc" layoutX="24.0" layoutY="115.0" text="Label" />
+                                                        <Label fx:id="pPrice" layoutX="24.0" layoutY="159.0" text="Label" />
+                                                        <Label fx:id="pDiscPrice" layoutX="24.0" layoutY="202.0" text="Label" />
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </ScrollPane>
+                                    </center>
                                 </BorderPane>
                             </children>
                         </AnchorPane>
@@ -66,5 +117,7 @@
 
             </tabs>
         </TabPane>
+        <Button fx:id="logout" onAction="#handleLogout" layoutY="2.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="73.0" text="Logout" AnchorPane.rightAnchor="1.0" />
+
     </children>
 </AnchorPane>

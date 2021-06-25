@@ -69,8 +69,7 @@ public class UserController {
         }
         User u = DbConnection.userDao.createUser(new User(firstNameTextField.getText(), lastNameTextField.getText(), loginTextField.getText(), passwordTextField.getText()), userRoleChoiceBox.getValue());
         u.setCreatedDate(new Date());
-        MainController.getUsers().add(DbConnection.userDao.getUserByLogin(loginTextField.getText()));
-
+      MainController.getUsers().add(DbConnection.userDao.getUserByLogin(loginTextField.getText()));
         alert("Benutzer erfolgreich angelegt!");
         stage.close();
     }

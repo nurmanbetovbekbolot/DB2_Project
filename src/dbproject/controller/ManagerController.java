@@ -2,32 +2,24 @@ package dbproject.controller;
 
 import dbproject.Main;
 import dbproject.db.DbConnection;
-import dbproject.dto.Package;
 import dbproject.dto.*;
-import dbproject.model.Role;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import dbproject.dto.Package;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainController{
+public class ManagerController {
+
 
     //User
     @FXML
@@ -71,8 +63,6 @@ public class MainController{
 
     @FXML
     private Label uDate;
-
-    private Stage primaryStage;
 
     //Order
     @FXML
@@ -206,8 +196,6 @@ public class MainController{
     @FXML
     private Label tDate;
 
-    @FXML
-    private Button logoutButton;
 
     private Main main;
 
@@ -218,17 +206,17 @@ public class MainController{
     private static final ObservableList<Task> tasks = FXCollections.observableArrayList();
 
 
-    public MainController() {
+    public ManagerController() {
     }
 
     @FXML
     protected void initialize() {
-        userIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
-        vorNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        nachNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        loginColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));
-        roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
-        createdAtColumn.setCellValueFactory(new PropertyValueFactory<>("createdDate"));
+//        userIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
+//        vorNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+//        nachNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+//        loginColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));
+//        roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
+//        createdAtColumn.setCellValueFactory(new PropertyValueFactory<>("createdDate"));
 
         orderIdColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         orderNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -254,19 +242,11 @@ public class MainController{
         taskCreatedAtColumn.setCellValueFactory(new PropertyValueFactory<>("createdDate"));
 
         users.addAll(DbConnection.userDao.getUsers());
-        orders.addAll(DbConnection.orderDao.getOrders());
+        orders.addAll(DbConnection.orderDao.getOrdersByManagerId(DbConnection.loggedInUser.getId()));
         packages.addAll(DbConnection.packageDao.getPackages());
         services.addAll(DbConnection.serviceDao.getServices());
         tasks.addAll(DbConnection.taskDao.getTasks());
-//        addButtonToTable();
 
-        uId.setText("Nr");
-        uFname.setText("Vorname");
-        uLname.setText("Nachname");
-        uLogin.setText("Login");
-        uRole.setText("Role");
-        uPass.setText("Password");
-        uDate.setText("Erstellt_am");
 
         oId.setText("Nr");
         oName.setText("Name");
@@ -290,9 +270,6 @@ public class MainController{
         tDate.setText("Erstellt_am");
 
 
-        userTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            showUsersDetailedInfo(newValue);
-        });
         orderTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             showOrdersDetailedInfo(newValue);
         });
@@ -306,16 +283,6 @@ public class MainController{
         });
     }
 
-    private void showUsersDetailedInfo(User u){
-        uId.setText(""+u.getUserId());
-        uFname.setText(u.getFirstName());
-        uLname.setText(u.getLastName());
-        uLogin.setText(u.getUserName());
-        uRole.setText(u.getRole());
-        uPass.setText(u.getPassword());
-        uDate.setText(u.getCreatedDate().toString());
-
-    }
 
     private void showOrdersDetailedInfo(Order o){
         oId.setText(""+o.getOrderId());
@@ -358,22 +325,79 @@ public class MainController{
         }
     }
 
+    @FXML
+    private void handleCreateUser() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("../view/CreateUserDialog.fxml"));
+            AnchorPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Benutzer erstellen");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(this.main.getPrimaryStage());
+            dialogStage.setScene(new Scene(page));
+            UserController controller = loader.getController();
+            controller.setMain(this.main);
+            controller.setStage(dialogStage);
+            dialogStage.showAndWait();
+
+        } catch (IOException e) {
+            alert("Etwas ist schief gelaufen.");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleEditUser() {
+        User selectedUser = userTable.getSelectionModel().getSelectedItem();
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("../view/EditUserDialog.fxml"));
+            AnchorPane page = null;
+            page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Benutzer bearbeiten");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(this.main.getPrimaryStage());
+            dialogStage.setScene(new Scene(page));
+            UserController controller = loader.getController();
+            controller.setMain(this.main, selectedUser);
+            controller.setStage(dialogStage);
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            alert("Etwas ist schief gelaufen.");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleDeleteUser() {
+        int selectedUserIndex = userTable.getSelectionModel().getSelectedIndex();
+        if (selectedUserIndex >= 0) {
+            User userInUserTv = userTable.getItems().get(selectedUserIndex);
+            DbConnection.userDao.deleteUserById(userInUserTv.getUserId());
+            users.remove(userInUserTv);
+            userTable.getSelectionModel().clearSelection();
+        } else {
+            alert("Bitte wählen Sie in der Tabelle einen Benutzer aus.");
+        }
+    }
 
     @FXML
     private void handleCreateOrder() {
         try {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("../view/CreateOrderDialog.fxml"));
-                AnchorPane page = loader.load();
-                Stage dialogStage = new Stage();
-                dialogStage.setTitle("Bestellung erstellen");
-                dialogStage.initModality(Modality.WINDOW_MODAL);
-                dialogStage.initOwner(this.main.getPrimaryStage());
-                dialogStage.setScene(new Scene(page));
-                OrderController controller = loader.getController();
-                controller.setMain(this.main);
-                controller.setStage(dialogStage);
-                dialogStage.showAndWait();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("../view/CreateOrderDialog.fxml"));
+            AnchorPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Bestellung erstellen");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(this.main.getPrimaryStage());
+            dialogStage.setScene(new Scene(page));
+            OrderController controller = loader.getController();
+            controller.setMain(this.main);
+            controller.setStage(dialogStage);
+            dialogStage.showAndWait();
 
         } catch (IOException e) {
             alert("Etwas ist schief gelaufen.");
@@ -482,47 +506,26 @@ public class MainController{
         }
     }
 
-    @FXML
-    private void handleToPackage() {
-        Package selectedPackage = packageTable.getSelectionModel().getSelectedItem();
-        if (selectedPackage != null) {
-            try {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("../view/Package.fxml"));
-                AnchorPane page = loader.load();
-                Stage dialogStage = new Stage();
-                dialogStage.setTitle(selectedPackage.getName());
-                dialogStage.initOwner(this.main.getPrimaryStage());
-                dialogStage.setScene(new Scene(page));
-                dialogStage.setWidth(800);
-                PackageOverviewController controller = loader.getController();
-                controller.setSelectedPackage(selectedPackage);
-                controller.setMain(this.main);
-                controller.setStage(dialogStage);
-                dialogStage.showAndWait();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            alert("Es ist keine Bestellung ausgewählt! Bitte wählen Sie zuerst Bestellung aus.");
-        }
-    }
 
     @FXML
     private void handleCreateService() {
+//        Service selectedService = serviceTable.getSelectionModel().getSelectedItem();
+//        Package selectedPackage = packageTable.getSelectionModel().getSelectedItem();
         try {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("../view/CreateServiceDialog.fxml"));
-                AnchorPane page = loader.load();
-                Stage dialogStage = new Stage();
-                dialogStage.setTitle("Dienst erstellen");
-                dialogStage.initModality(Modality.WINDOW_MODAL);
-                dialogStage.initOwner(this.main.getPrimaryStage());
-                dialogStage.setScene(new Scene(page));
-                ServiceController controller = loader.getController();
-                controller.setMain(this.main);
-                controller.setStage(dialogStage);
-                dialogStage.showAndWait();
+//            if (selectedService == null) {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("../view/CreateServiceDialog.fxml"));
+            AnchorPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Dienst erstellen");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(this.main.getPrimaryStage());
+            dialogStage.setScene(new Scene(page));
+            ServiceController controller = loader.getController();
+            controller.setMain(this.main);
+            controller.setStage(dialogStage);
+            dialogStage.showAndWait();
+//            }
 
         } catch (IOException e) {
             alert("Etwas ist schief gelaufen.");
@@ -533,6 +536,7 @@ public class MainController{
     @FXML
     private void handleEditService() {
         Service selectedService = serviceTable.getSelectionModel().getSelectedItem();
+//        Package selectedPackage = packageTable.getSelectionModel().getSelectedItem();
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("../view/EditServiceDialog.fxml"));
@@ -559,11 +563,16 @@ public class MainController{
     @FXML
     private void handleDeleteService() {
         int selectedServiceIndex = serviceTable.getSelectionModel().getSelectedIndex();
+//        int selectedPackageIndex = packageTable.getSelectionModel().getSelectedIndex();
         if (selectedServiceIndex >= 0) {
             Service serviceInPackageTv = serviceTable.getItems().get(selectedServiceIndex);
             DbConnection.serviceDao.deleteServiceById(serviceInPackageTv.getServiceId());
             services.remove(serviceInPackageTv);
             serviceTable.getSelectionModel().clearSelection();
+//            Package packageInPackageTv = packageTable.getItems().get(selectedPackageIndex);
+//            packageDao.deletePackageById(packageInPackageTv.getPackageId());
+//            packages.remove(packageInPackageTv);
+//            packageTable.getSelectionModel().clearSelection();
         } else {
             alert("Bitte wählen Sie in der Tabelle einen Dienst aus.");
         }
@@ -572,19 +581,22 @@ public class MainController{
 
     @FXML
     private void handleCreateTask() {
+//        Task selectedTask = taskTable.getSelectionModel().getSelectedItem();
         try {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("../view/CreateTaskDialog.fxml"));
-                AnchorPane page = loader.load();
-                Stage dialogStage = new Stage();
-                dialogStage.setTitle("Aufgabe erstellen");
-                dialogStage.initModality(Modality.WINDOW_MODAL);
-                dialogStage.initOwner(this.main.getPrimaryStage());
-                dialogStage.setScene(new Scene(page));
-                TaskController controller = loader.getController();
-                controller.setMain(this.main);
-                controller.setStage(dialogStage);
-                dialogStage.showAndWait();
+//            if (selectedTask == null) {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("../view/CreateTaskDialog.fxml"));
+            AnchorPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Aufgabe erstellen");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(this.main.getPrimaryStage());
+            dialogStage.setScene(new Scene(page));
+            TaskController controller = loader.getController();
+            controller.setMain(this.main);
+            controller.setStage(dialogStage);
+            dialogStage.showAndWait();
+//            }
 
         } catch (IOException e) {
             alert("Etwas ist schief gelaufen.");
@@ -631,66 +643,6 @@ public class MainController{
         }
     }
 
-
-    @FXML
-    private void handleCreateUser() {
-        try {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("../view/CreateUserDialog.fxml"));
-                AnchorPane page = loader.load();
-                Stage dialogStage = new Stage();
-                dialogStage.setTitle("Benutzer erstellen");
-                dialogStage.initModality(Modality.WINDOW_MODAL);
-                dialogStage.initOwner(this.main.getPrimaryStage());
-                dialogStage.setScene(new Scene(page));
-                UserController controller = loader.getController();
-                controller.setMain(this.main);
-                controller.setStage(dialogStage);
-                dialogStage.showAndWait();
-
-        } catch (IOException e) {
-            alert("Etwas ist schief gelaufen.");
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleEditUser() {
-        User selectedUser = userTable.getSelectionModel().getSelectedItem();
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("../view/EditUserDialog.fxml"));
-            AnchorPane page = null;
-            page = loader.load();
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Benutzer bearbeiten");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(this.main.getPrimaryStage());
-            dialogStage.setScene(new Scene(page));
-            UserController controller = loader.getController();
-            controller.setMain(this.main, selectedUser);
-            controller.setStage(dialogStage);
-            dialogStage.showAndWait();
-        } catch (IOException e) {
-            alert("Etwas ist schief gelaufen.");
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleDeleteUser() {
-        int selectedUserIndex = userTable.getSelectionModel().getSelectedIndex();
-        if (selectedUserIndex >= 0) {
-            User userInUserTv = userTable.getItems().get(selectedUserIndex);
-            DbConnection.userDao.deleteUserById(userInUserTv.getUserId());
-            users.remove(userInUserTv);
-            userTable.getSelectionModel().clearSelection();
-        } else {
-            alert("Bitte wählen Sie in der Tabelle einen Benutzer aus.");
-        }
-    }
-
-
     @FXML
     public void handleSearchUser() {
         try {
@@ -710,53 +662,13 @@ public class MainController{
 
     }
 
-    private void addButtonToTable() {
-        TableColumn<Service, Void> colBtn = new TableColumn("Button Column");
 
-//    @FXML
-//            public void
-        Callback<TableColumn<Service, Void>, TableCell<Service, Void>> cellFactory = new Callback<TableColumn<Service, Void>, TableCell<Service, Void>>() {
-            @Override
-            public TableCell<Service, Void> call(final TableColumn<Service, Void> param) {
-                final TableCell<Service, Void> cell = new TableCell<Service, Void>() {
-
-                    private final Button btn = new Button("Hinzufügen");
-
-                    {
-                        btn.setOnAction((ActionEvent event) -> {
-//                            DbConnection.serviceDao.createService(new Service(serviceNameTextField.getText())
-//                            DbConnection.serviceDao.
-//                            Service service = getTableView().getItems().get(getIndex());
-//                            System.out.println("selectedData: " + service);
-                        });
-                    }
-
-                    @Override
-                    public void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(btn);
-                        }
-                    }
-                };
-                return cell;
-            }
-        };
-
-        colBtn.setCellFactory(cellFactory);
-
-        serviceTable.getColumns().add(colBtn);
-
+    public static ObservableList<Order> getOrders() {
+        return orders;
     }
 
     public static ObservableList<User> getUsers() {
         return users;
-    }
-
-    public static ObservableList<Order> getOrders() {
-        return orders;
     }
 
     public static ObservableList<Package> getPackages() {
@@ -773,6 +685,7 @@ public class MainController{
 
     public void setMain(Main main) {
         this.main = main;
+
         userTable.setItems(users);
         orderTable.setItems(orders);
         packageTable.setItems(packages);
@@ -784,55 +697,6 @@ public class MainController{
 //        packageTable.setItems(DbConnection.packageDao.getPackages());
 //        serviceTable.setItems(DbConnection.serviceDao.getServices());
 //        taskTable.setItems(DbConnection.taskDao.getTasks());
-    }
-
-
-
-    @FXML
-    private void handleToOrder() {
-        Order selectedOrder = orderTable.getSelectionModel().getSelectedItem();
-//        SmsHandy selectedHandy = smsHandyTableView.getSelectionModel().getSelectedItem();
-        if (selectedOrder != null) {
-            try {
-//                showSmsHandyWindow(selectedHandy);
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(Main.class.getResource("../view/Order.fxml"));
-                AnchorPane page = loader.load();
-
-                Stage dialogStage = new Stage();
-                dialogStage.setTitle(selectedOrder.getName());
-                dialogStage.initOwner(this.main.getPrimaryStage());
-                dialogStage.setScene(new Scene(page));
-                OrderController controller = loader.getController();
-                controller.setSelectedOrder(selectedOrder);
-                controller.setMain(this.main);
-                controller.setStage(dialogStage);
-                dialogStage.showAndWait();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            alert("Es ist keine Bestellung ausgewählt! Bitte wählen Sie zuerst Bestellung aus.");
-        }
-    }
-
-    @FXML
-    public void handleLogout(ActionEvent event) {
-                try {
-                    Node node = (Node) event.getSource();
-                    Stage stage = (Stage) node.getScene().getWindow();
-                    //stage.setMaximized(true);
-                    stage.close();
-                    FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(getClass().getResource("../view/Login.fxml"));
-                    Parent parent = loader.load();
-                    Scene scene = new Scene(parent);
-                    stage.setScene(scene);
-                    stage.show();
-        } catch (IOException e) {
-            alert("Etwas ist schief gelaufen.");
-            e.printStackTrace();
-        }
     }
 
     private void alert(String text) {
