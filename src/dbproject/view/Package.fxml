@@ -17,8 +17,8 @@
             <top>
                 <Pane prefHeight="58.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                     <children>
-                        <Label fx:id="forPinfo" layoutX="14.0" layoutY="21.0" text="Label" />
-                        <Label fx:id="forInfo" layoutX="14.0" layoutY="41.0" text="Label" />
+                        <Label fx:id="forPinfo" layoutX="14.0" layoutY="21.0"/>
+                        <Label fx:id="forInfo" layoutX="14.0" layoutY="41.0"/>
                     </children>
                 </Pane>
             </top>
@@ -28,13 +28,17 @@
                 <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 
                <buttons>
-                  <TextField fx:id="serviceTextField"/>
+                  <TextField fx:id="serviceTextField" promptText="Name"/>
                   <Button onAction="#handleCreateService" mnemonicParsing="false" text="Hinzufügen" />
-                  <Button onAction="#handleEditService" mnemonicParsing="false" text="Löschen" />
-                  <TextField fx:id="taskTextField"/>
-                  <Button mnemonicParsing="false" text="Hinzufügen" />
-                  <Button mnemonicParsing="false" text="Löschen" />
+                  <Button onAction="#handleDeleteService" mnemonicParsing="false" text="Löschen" />
+                  <TextField fx:id="taskNameTextField" promptText="Name"/>
+                  <TextField fx:id="taskDescTextField" promptText="Bezeichnung"/>
+                  <Button onAction="#handleCreateTaskButton" mnemonicParsing="false" text="Hinzufügen" />
+                  <Button onAction="#handleDeleteTask" mnemonicParsing="false" text="Löschen" />
                </buttons>
+                    <BorderPane.margin>
+                        <Insets left="5.0" right="5.0" />
+                    </BorderPane.margin>
                 </ButtonBar>
             </bottom>
 

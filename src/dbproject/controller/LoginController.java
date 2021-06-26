@@ -16,12 +16,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class LoginController{
+public class LoginController {
 
     private Main main;
 
@@ -39,11 +37,6 @@ public class LoginController{
 
 
     private Connection conn;
-    PreparedStatement preparedStatement = null;
-    ResultSet resultSet = null;
-
-//    public String login = txtUsername.getText();
-
 
     @FXML
     public void handleButtonAction(MouseEvent event) {
@@ -60,7 +53,7 @@ public class LoginController{
 
                                 break;
                             case "MANAGER":
-                                pathToView = "../view/Main.fxml";
+                                pathToView = "../view/Manager.fxml";
                                 break;
                             case "CLIENT":
                                 pathToView = "../view/Client.fxml";
@@ -82,8 +75,11 @@ public class LoginController{
                     if (DbConnection.loggedInUser.getRole().equals("CLIENT")) {
                         ClientController moc = loader.getController();
                         moc.setMain(main);
-//                        .setTitle("MAKK | " + authUserRole + " | " + emailTextField.getText());
 
+                    }
+                    else if (DbConnection.loggedInUser.getRole().equals("MANAGER")){
+                        ManagerController moc = loader.getController();
+                        moc.setMain(main);
                     }
                     else if (DbConnection.loggedInUser.getRole().equals("ADMIN")){
                         MainController moc = loader.getController();
@@ -101,8 +97,6 @@ public class LoginController{
     }
 
 
-
-
 //    @Override
 //    public void initialize(URL url, ResourceBundle rb) {
 //        if (conn == null) {
@@ -118,49 +112,30 @@ public class LoginController{
 //        conn = dbConnection.connect();
 //    }
 
-    //we gonna use string to check for status
-    private String logIn(){
+    private String logIn() {
         String status = "Success";
         String login = txtUsername.getText();
         String password = txtPassword.getText();
-        if(login.isEmpty() || password.isEmpty()) {
+        if (login.isEmpty() || password.isEmpty()) {
             setLblError(Color.TOMATO, "Empty credentials");
             status = "Error";
         } else {
-            //query
-//            String sql = "SELECT * FROM benutzer WHERE benutzer_name = ? and password = ?";
             try {
-            DbConnection.initialize(login, password);
-
-            }
-            catch (SQLException e){
-             setLblError(Color.TOMATO,"Enter correct credentials");
+                DbConnection.initialize(login, password);
+                MainController.getUsers().clear();
+                MainController.getOrders().clear();
+                MainController.getPackages().clear();
+                MainController.getServices().clear();
+                MainController.getTasks().clear();
+            } catch (SQLException e) {
+                setLblError(Color.TOMATO, "Enter correct credentials");
                 status = "Error";
 
             }
-
-//            if (conn == null)
-//                setLblError(Color.TOMATO, "Enter Correct Email/Password");
-//            try (Connection conn = dbConnection.connect() ;
-//                 PreparedStatement statement = conn.prepareStatement(sql)) {
-//
-//            preparedStatement.setString(1, login);
-//            preparedStatement.setString(2, password);
-//            resultSet = preparedStatement.executeQuery();
-//            if (!resultSet.next()) {
-//                if () {
-//                    setLblError(Color.TOMATO, "Enter Correct Email/Password");
-//                    status = "Error";
-//                } else {
-//                    setLblError(Color.GREEN, "Login Successful..Redirecting..");
-//                }
-//            } catch (SQLException throwables) {
-//                throwables.printStackTrace();
-//            }
         }
         return status;
     }
-    
+
     private void setLblError(Color color, String text) {
         lblErrors.setTextFill(color);
         lblErrors.setText(text);

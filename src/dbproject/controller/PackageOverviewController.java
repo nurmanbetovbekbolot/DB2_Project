@@ -22,62 +22,14 @@ import java.util.Date;
 public class PackageOverviewController {
     private Main main;
     private Stage stage;
-    //    private PackageDao packageDao;
     private Package selectedPackage;
     private Package editedPackage;
-
-
-    @FXML
-    private TextField packageNameTextField;
-
-    @FXML
-    private TextArea packageDescriptionTextField;
-
-    @FXML
-    private TextField packagePriceTextField;
-
-    @FXML
-    private TextField packageDiscountPriceTextField;
-
-    @FXML
-    private TableView<Package> packageTable;
-
-    @FXML
-    private TableColumn<Package, Integer> packageIdColumn;
-
-
-    @FXML
-    private TableColumn<Package, String> packageNameColumn;
-
-    @FXML
-    private TableColumn<Package, String> descriptionColumn;
-
-    @FXML
-    private TableColumn<Package, Double> preisColumn;
-
-    @FXML
-    private TableColumn<Package, Double> discountPreisColumn;
 
     @FXML
     private Label forPinfo;
 
     @FXML
     private Label forInfo;
-
-    @FXML
-    private Label pId;
-
-    @FXML
-    private Label pName;
-
-    @FXML
-    private Label pDesc;
-
-    @FXML
-    private Label pPrice;
-
-    @FXML
-    private Label pDiscPrice;
 
     @FXML
     private TableView<Service> serviceTable;
@@ -111,33 +63,15 @@ public class PackageOverviewController {
     private TextField serviceTextField;
 
     @FXML
-    private TextField taskTextField;
+    private TextField taskNameTextField;
 
-//    @FXML
-//    private Label tId;
-//
-//    @FXML
-//    private Label tName;
-//
-//    @FXML
-//    private Label tDesc;
-//
-//    @FXML
-//    private Label tService;
-//
-//    @FXML
-//    private Label tDate;
-
+    @FXML
+    private TextField taskDescTextField;
 
     @FXML
     private void initialize() {
-        forInfo.setText("Info");
-//
-//        pId.setText("Nr");
-//        pName.setText("Name");
-//        pDesc.setText("Bezeichnung");
-//        pPrice.setText("Preis");
-//        pDiscPrice.setText("Discount Preis");
+        forInfo.setText("");
+
 
         serviceIdColumn.setCellValueFactory(new PropertyValueFactory<>("serviceId"));
         serviceNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -149,41 +83,9 @@ public class PackageOverviewController {
         taskCreatedAtColumn.setCellValueFactory(new PropertyValueFactory<>("createdDate"));
 
         serviceTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            forInfo.setText("Nr: "+newValue.getServiceId()+" | Name: "+newValue.getName());
+            forInfo.setText("Nr: "+(newValue==null?"":newValue.getServiceId())+" | Name: "+(newValue==null?"":newValue.getName()));
             showServicesTasks(newValue);
         });
-    }
-
-
-    @FXML
-    private void handleCreatePackageButton() {
-//        String message = checkPackageData();
-//        if (!message.equals("")) {
-//            alert(message);
-//            return;
-//        }
-//        Package p = DbConnection.packageDao.createPackage(new Package(packageNameTextField.getText(), packageDescriptionTextField.getText(), Double.parseDouble(packagePriceTextField.getText()), Double.parseDouble(packageDiscountPriceTextField.getText())));
-//
-//        MainController.getPackages().add(DbConnection.packageDao.getPackageByName(packageNameTextField.getText()));
-//
-//        alert("Paket erfolgreich angelegt!");
-//        stage.close();
-    }
-
-
-    @FXML
-    private void handleEditPackageButton() {
-//        String message = checkPackageData();
-//        if (message.equals("")) {
-//            Package p = new Package(editedPackage.getPackageId(),packageNameTextField.getText(),packageDescriptionTextField.getText(),Double.parseDouble(packagePriceTextField.getText()),Double.parseDouble(packageDiscountPriceTextField.getText()));
-//            DbConnection.packageDao.updatePackage(p);
-//            MainController.getPackages().remove(editedPackage);
-//            MainController.getPackages().add(p);
-//            alert("Paket erfolgreich bearbeitet!");
-//            stage.close();
-//        } else {
-//            alert(message);
-//        }
     }
 
     @FXML
@@ -197,10 +99,8 @@ public class PackageOverviewController {
         Service fromDb = DbConnection.serviceDao.getServiceByName(serviceTextField.getText());
 
         DbConnection.serviceDao.addServiceToPackage2(selectedPackage.getPackageId(),fromDb.getServiceId());
-        System.out.println(taskTextField.getText());
         alert("Dienst erfolgreich angelegt!");
         serviceTable.getItems().add(fromDb);
-//        DbConnection.serviceDao.getServicesByPackageId(selectedPackage.getPackageId());
 
     }
 
@@ -229,18 +129,58 @@ public class PackageOverviewController {
 
     }
 
-
     @FXML
     private void handleDeleteService() {
         int selectedServiceIndex = serviceTable.getSelectionModel().getSelectedIndex();
         if (selectedServiceIndex >= 0) {
             Service serviceInPackageTv = serviceTable.getItems().get(selectedServiceIndex);
-            DbConnection.serviceDao.deleteServiceById(serviceInPackageTv.getServiceId());
-            MainController.getServices().remove(serviceInPackageTv);
-            serviceTable.getSelectionModel().clearSelection();
+            DbConnection.serviceDao.deleteServiceFromPackage(serviceInPackageTv.getServiceId());
+            int delId=serviceInPackageTv.getServiceId();
+            serviceTable.getItems().remove(serviceInPackageTv);
+            taskTable.getItems().removeIf(task -> task.getService()==delId);
+//            serviceTable.getSelectionModel().clearSelection();
         } else {
             alert("Bitte wählen Sie in der Tabelle einen Dienst aus.");
         }
+    }
+
+    @FXML
+    private void handleCreateTaskButton() {
+        String message = checkTaskData();
+        if (!message.equals("")) {
+            alert(message);
+            return;
+        }
+        Service selectedService = serviceTable.getSelectionModel().getSelectedItem();
+
+        if (selectedService!=null) {
+            Task t = DbConnection.taskDao.createTask(new Task(taskNameTextField.getText(), taskDescTextField.getText(), selectedService.getServiceId()));
+            taskTable.getItems().add(DbConnection.taskDao.getTaskByName(taskNameTextField.getText()));
+            alert("Aufgabe erfolgreich angelegt!");
+        }
+        else
+            alert("Bitte wählen Sie in der Tabelle einen Dienst aus.");
+    }
+
+
+    @FXML
+    private void handleDeleteTask() {
+        int selectedTaskIndex = taskTable.getSelectionModel().getSelectedIndex();
+        if (selectedTaskIndex >= 0) {
+            Task taskInTaskTv = taskTable.getItems().get(selectedTaskIndex);
+            DbConnection.taskDao.deleteTaskById(taskInTaskTv.getTaskId());
+            taskTable.getItems().remove(taskInTaskTv);
+            taskTable.getSelectionModel().clearSelection();
+        } else {
+            alert("Bitte wählen Sie in der Tabelle eine Aufgabe aus.");
+        }
+    }
+
+    private String checkTaskData() {
+        String message = "";
+        if (taskNameTextField.getText().isBlank() || taskDescTextField.getText().isBlank())
+            return "Feld kann nicht leer sein!";
+        return message;
     }
 
     @FXML
@@ -283,10 +223,6 @@ public class PackageOverviewController {
     public void setMain(Main main, Package p) {
         this.main = main;
         this.editedPackage = p;
-        packageNameTextField.setText(p.getName());
-        packageDescriptionTextField.setText(p.getDescription());
-        packagePriceTextField.setText("" + p.getPrice());
-        packageDiscountPriceTextField.setText("" + p.getDiscountPrice());
     }
 
 //    private void updateItems(Service s){
@@ -296,8 +232,6 @@ public class PackageOverviewController {
     private void showServicesTasks(Service service){
         if (service != null){
             taskTable.setItems(DbConnection.taskDao.getTasksByServiceId(service.getServiceId()));
-//            forInfo.setText("");
-
         }
         else {
             serviceTable.setItems(null);

@@ -6,6 +6,8 @@ import dbproject.dto.Package;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.sql.*;
 
 public class OrderDao extends DbConnection {
@@ -92,6 +94,24 @@ public class OrderDao extends DbConnection {
         return orders;
     }
 
+    //XML
+    public void getAllOrdersXML() {
+        String SQL = "SELECT (SELECT * FROM bestellung\n" +
+                "FOR XML PATH('BESTELLUNG'), TYPE, ELEMENTS , ROOT('BESTELLUNGEN')) as orderXML";
+        try (Connection conn = connect();
+             Statement statement = conn.createStatement();
+             ResultSet rs = statement.executeQuery(SQL)) {
+            while (rs.next()) {
+                SQLXML xml= rs.getSQLXML("orderXML");
+                String values = xml.getString();
+                PrintWriter out = new PrintWriter("D://DB_2/CRM-System/orders.xml");
+                out.println(values);
+                out.flush();
+            }
+        } catch (SQLException| FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Order getOrderById(int id) {
         String SQL = "select * from bestellung where bestellungnr = ? ";
@@ -180,7 +200,6 @@ public class OrderDao extends DbConnection {
     }
 
     public boolean deleteOrderById(int id) {
-        //TODO delete all references
         String SQL = "delete from bestellung where bestellungnr = ?";
         try (Connection conn = connect();
              PreparedStatement statement = conn.prepareStatement(SQL)) {

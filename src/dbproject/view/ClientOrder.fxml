@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="dbproject.controller.ClientOrderController"
+            prefHeight="400.0" prefWidth="600.0">
+<children>
+    <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <top>
+            <Pane prefHeight="58.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                <children>
+                    <Label fx:id="forPinfo" layoutX="14.0" layoutY="21.0"/>
+                    <Label fx:id="forInfo" layoutX="14.0" layoutY="41.0"/>
+                </children>
+            </Pane>
+        </top>
+
+        <bottom>
+
+            <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+
+<!--                <buttons>-->
+<!--                    <TextField fx:id="serviceTextField" promptText="Name"/>-->
+<!--                    <Button onAction="#handleCreateService" mnemonicParsing="false" text="Hinzufügen" />-->
+<!--                    <Button onAction="#handleDeleteService" mnemonicParsing="false" text="Löschen" />-->
+<!--                    <TextField fx:id="taskNameTextField" promptText="Name"/>-->
+<!--                    <TextField fx:id="taskDescTextField" promptText="Bezeichnung"/>-->
+<!--                    <Button onAction="#handleCreateTaskButton" mnemonicParsing="false" text="Hinzufügen" />-->
+<!--                    <Button onAction="#handleDeleteTask" mnemonicParsing="false" text="Löschen" />-->
+<!--                </buttons>-->
+                <BorderPane.margin>
+                    <Insets left="5.0" right="5.0" />
+                </BorderPane.margin>
+            </ButtonBar>
+        </bottom>
+
+        <left>
+            <TableView fx:id="serviceTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <columns>
+                    <TableColumn fx:id="serviceIdColumn" prefWidth="75.0" text="Nr" />
+                    <TableColumn fx:id="serviceNameColumn" prefWidth="124.0" text="Name" />
+                </columns>
+            </TableView>
+        </left>
+        <center>
+            <TableView fx:id="taskTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <columns>
+                    <TableColumn fx:id="taskIdColumn" prefWidth="21.5999755859375" text="Nr" />
+                    <TableColumn fx:id="taskNameColumn" prefWidth="128.800048828125" text="Name" />
+                    <TableColumn fx:id="taskDescriptionColumn" prefWidth="174.39996337890625" text="Bezeichnung" />
+                    <TableColumn fx:id="taskCreatedAtColumn" prefWidth="74.4000244140625" text="Erstellt_am" />
+                </columns>
+            </TableView>
+        </center>
+    </BorderPane>
+</children>
+</AnchorPane>

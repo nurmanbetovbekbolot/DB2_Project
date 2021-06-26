@@ -4,8 +4,6 @@ import dbproject.Main;
 import dbproject.db.DbConnection;
 import dbproject.dto.Order;
 import dbproject.dto.Package;
-import dbproject.dto.Service;
-import dbproject.dto.Task;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,6 +23,7 @@ import java.util.Date;
 public class ClientController {
     private Main main;
     private Stage stage;
+    private Order selectedOrder;
 
     @FXML
     private TableView<Order> orderTable;
@@ -116,35 +116,35 @@ public class ClientController {
         orderPackageColumn.setCellValueFactory(new PropertyValueFactory<>("paketId"));
         orderCreatedAtColumn.setCellValueFactory(new PropertyValueFactory<>("createdDate"));
 
-        packageIdColumn.setCellValueFactory(new PropertyValueFactory<>("packageId"));
-        packageNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-        preisColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        discountPreisColumn.setCellValueFactory(new PropertyValueFactory<>("discountPrice"));
+//        packageIdColumn.setCellValueFactory(new PropertyValueFactory<>("packageId"));
+//        packageNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+//        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+//        preisColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+//        discountPreisColumn.setCellValueFactory(new PropertyValueFactory<>("discountPrice"));
 
         myOrders.addAll(DbConnection.orderDao.getOrdersByClientId(DbConnection.loggedInUser.getId()));
-        myPackages.addAll(DbConnection.packageDao.getPackagesInOrder(myOrders.get(0).getOrderId()));
+//        myPackages.addAll(DbConnection.packageDao.getPackagesInOrder(myOrders.get(0).getOrderId()));
 
         orderTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             showOrdersDetailedInfo(newValue);
         });
 
-
-        packageTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            showPackagesDetailedInfo(newValue);
-        });
+//
+//        packageTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+//            showPackagesDetailedInfo(newValue);
+//        });
 
 
     }
 
     private void showOrdersDetailedInfo(Order o){
-        oId.setText(""+o.getOrderId());
-        oName.setText(o.getName());
-        oDesc.setText(o.getDescription());
-        oClient.setText(DbConnection.userDao.getUserById(o.getClientId()).toString());
-        oManager.setText(DbConnection.userDao.getUserById(o.getManagerId()).toString());
-        oPackage.setText(DbConnection.packageDao.getPackageById(o.getPaketId()).toString());
-        oDate.setText(o.getCreatedDate().toString());
+        oId.setText("Nr: "+o.getOrderId());
+        oName.setText("Name: "+o.getName());
+        oDesc.setText("Bezeichnung: "+o.getDescription());
+        oClient.setText("Kunde: "+DbConnection.userDao.getUserById(o.getClientId()).toString());
+        oManager.setText("Manager: "+DbConnection.userDao.getUserById(o.getManagerId()).toString());
+        oPackage.setText("Paket: "+DbConnection.packageDao.getPackageById(o.getPaketId()).toString());
+        oDate.setText("Erstellt_am: "+o.getCreatedDate().toString());
 
     }
 
@@ -161,16 +161,53 @@ public class ClientController {
         return myOrders;
     }
 
+    @FXML
+    private void handleToOrder() {
+        Order selectedOrder = orderTable.getSelectionModel().getSelectedItem();
+        if (selectedOrder != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("../view/ClientOrder.fxml"));
+                AnchorPane page = loader.load();
+                Stage dialogStage = new Stage();
+                dialogStage.setTitle(selectedOrder.getName());
+                dialogStage.initOwner(this.main.getPrimaryStage());
+                dialogStage.setScene(new Scene(page));
+                dialogStage.setWidth(800);
+                ClientOrderController controller = loader.getController();
+                controller.setSelectedOrder(selectedOrder);
+                controller.setMain(this.main);
+                controller.setStage(dialogStage);
+                dialogStage.showAndWait();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            alert("Es ist keine Bestellung ausgewählt! Bitte wählen Sie zuerst Bestellung aus.");
+        }
+    }
+    public void setSelectedOrder(Order o) {
+        this.selectedOrder = o;
+//        forPinfo.setText("PaketNr: "+p.getPackageId()+" | Name: "+p.getName()+" | Bezeichnung: "+p.getDescription()+" | Preis: "+p.getPrice()+" | Discount: "+p.getDiscountPrice());
+
+    }
+
     public void setMain(Main main) {
         this.main = main;
         orderTable.setItems(myOrders);
-        packageTable.setItems(myPackages);
+//        packageTable.setItems(myPackages);
 
     }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
 
     @FXML
     public void handleLogout(ActionEvent event) {
         try {
+            orderTable.getItems().clear();
             Node node = (Node) event.getSource();
             Stage stage = (Stage) node.getScene().getWindow();
             stage.close();

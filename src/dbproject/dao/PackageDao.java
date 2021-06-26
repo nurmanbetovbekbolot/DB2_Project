@@ -5,19 +5,16 @@ import dbproject.dto.Package;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.sql.*;
 
 public class PackageDao extends DbConnection{
-    private DbConnection dbConnection;
 
     public PackageDao(String url) {
         super(url);
-//        this.dbConnection = new DbConnection(url);
     }
-
-//    public PackageDao() {
-//    }
 
     public ObservableList<Package> getPackages() {
         ObservableList<Package> packages = FXCollections.observableArrayList();
@@ -38,6 +35,25 @@ public class PackageDao extends DbConnection{
             e.printStackTrace();
         }
         return packages;
+    }
+
+    //XML
+    public void getAllPackagesXML() {
+        String SQL = "SELECT (SELECT * FROM paket\n" +
+                "FOR XML PATH('PAKET'), TYPE, ELEMENTS , ROOT('PAKETE')) as packageXML";
+        try (Connection conn = connect();
+             Statement statement = conn.createStatement();
+             ResultSet rs = statement.executeQuery(SQL)) {
+            while (rs.next()) {
+                SQLXML xml= rs.getSQLXML("packageXML");
+                String values = xml.getString();
+                PrintWriter out = new PrintWriter("D://DB_2/CRM-System/packages.xml");
+                out.println(values);
+                out.flush();
+            }
+        } catch (SQLException| FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public ObservableList<Package> getPackagesInOrder(int id) {

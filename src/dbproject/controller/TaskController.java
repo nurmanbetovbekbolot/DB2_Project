@@ -97,9 +97,6 @@ public class TaskController {
         String message = "";
         if (taskNameTextField.getText().isBlank() || taskDescriptionTextField.getText().isBlank())
             return "Feld kann nicht leer sein!";
-//        for (Task t : taskDao.getTasks()) {
-//            if (t.getName().equals(taskNameTextField.getText())) return "Dieser datei ist besetzt";
-//        }
         return message;
     }
 

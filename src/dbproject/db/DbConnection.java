@@ -2,6 +2,7 @@ package dbproject.db;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 import dbproject.controller.LoginController;
+import dbproject.controller.MainController;
 import dbproject.dao.*;
 import dbproject.exception.WrongCredentialsException;
 import dbproject.model.UserModel;
@@ -54,6 +55,11 @@ public abstract class DbConnection {
         serviceDao = new ServiceDao(connUrl);
         taskDao = new TaskDao(connUrl);
         loggedInUser = userDao.getCurUserRole(connUrl, a);
+//        MainController.getUsers().removeAll();
+//        MainController.getOrders().removeAll();
+//        MainController.getPackages().removeAll();
+//        MainController.getServices().removeAll();
+//        MainController.getTasks().removeAll();
         System.out.println(loggedInUser);
     }
 
@@ -71,8 +77,4 @@ public abstract class DbConnection {
         return "";
     }
 
-
-    // Create an instance of a TestRepo and try to get connection
-//        testRepo = new TestRepo(connUrl);
-//        System.out.println("LOGGED IN AS: " + testRepo.getLoginData());
 }

@@ -6,6 +6,8 @@ import dbproject.dto.Task;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.sql.*;
 
 public class TaskDao extends DbConnection {
@@ -109,6 +111,25 @@ public class TaskDao extends DbConnection {
         return null;
     }
 
+    //XML
+    public void getAllTasksXML() {
+        String SQL = "SELECT (SELECT * FROM aufgabe\n" +
+                "FOR XML PATH('AUFGABE'), TYPE, ELEMENTS , ROOT('AUFGABEN')) as taskXML";
+        try (Connection conn = connect();
+             Statement statement = conn.createStatement();
+             ResultSet rs = statement.executeQuery(SQL)) {
+            while (rs.next()) {
+                SQLXML xml= rs.getSQLXML("taskXML");
+                String values = xml.getString();
+                PrintWriter out = new PrintWriter("D://DB_2/CRM-System/tasks.xml");
+                out.println(values);
+                out.flush();
+            }
+        } catch (SQLException| FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Task createTask(Task t) {
         String SQL = "insert into aufgabe(name, bezeichnung,dienst,erstellt_am) values (?,?,?,getdate())";
         try (Connection conn = connect();
@@ -145,6 +166,19 @@ public class TaskDao extends DbConnection {
         try (Connection conn = connect();
              PreparedStatement statement = conn.prepareStatement(SQL)) {
             statement.setInt(1, id);
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean deleteTaskByServiceId(int sId) {
+        String SQL = "delete from aufgabe where dienst = ?";
+        try (Connection conn = connect();
+             PreparedStatement statement = conn.prepareStatement(SQL)) {
+            statement.setInt(1, sId);
             statement.executeUpdate();
             return true;
         } catch (SQLException e) {

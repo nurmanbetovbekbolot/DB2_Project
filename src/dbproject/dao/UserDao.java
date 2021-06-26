@@ -7,6 +7,8 @@ import dbproject.model.UserModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.sql.*;
 
 public class UserDao extends DbConnection {
@@ -37,6 +39,48 @@ public class UserDao extends DbConnection {
             e.printStackTrace();
         }
         return users;
+    }
+
+    public ObservableList<User> getManagersClients(int mId) {
+        ObservableList<User> users = FXCollections.observableArrayList();
+        String SQL = "    select b.* from dbo.benutzer b where b.benutzernr = (select bs.kunde from dbo.bestellung bs where bs.manager=?)";
+        try (Connection conn = connect();
+             PreparedStatement statement = conn.prepareStatement(SQL)) {
+            statement.setInt(1, mId);
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    User user = new User();
+                    user.setUserId(rs.getInt("benutzernr"));
+                    user.setFirstName(rs.getString("vorname"));
+                    user.setLastName(rs.getString("nachname"));
+                    user.setUserName(rs.getString("benutzer_name"));
+                    user.setPassword(rs.getString("password"));
+                    user.setCreatedDate(rs.getDate("erstellt_am"));
+                    users.add(user);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    //XML
+    public void getAllUsersXML() {
+        String SQL = "SELECT (SELECT * FROM benutzer FOR XML PATH('BENUTZER'), TYPE, ELEMENTS , ROOT('BENUTZERN')) as userXML";
+        try (Connection conn = connect();
+             Statement statement = conn.createStatement();
+             ResultSet rs = statement.executeQuery(SQL)) {
+            while (rs.next()) {
+                SQLXML xml= rs.getSQLXML("userXML");
+                String values = xml.getString();
+                PrintWriter out = new PrintWriter("D://DB_2/CRM-System/users.xml");
+                out.println(values);
+                out.flush();
+            }
+        } catch (SQLException|FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public ObservableList<User> getUsersByName(String uname) {

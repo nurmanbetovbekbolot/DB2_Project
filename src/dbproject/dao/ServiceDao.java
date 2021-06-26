@@ -6,6 +6,8 @@ import dbproject.dto.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.sql.*;
 
 public class ServiceDao extends DbConnection {
@@ -70,6 +72,25 @@ public class ServiceDao extends DbConnection {
             e.printStackTrace();
         }
         return null;
+    }
+
+    //XML
+    public void getAllServicesXML() {
+        String SQL = "SELECT (SELECT * FROM dienst\n" +
+                "FOR XML PATH('DIENST'), TYPE, ELEMENTS , ROOT('DIENSTE')) as serviceXML";
+        try (Connection conn = connect();
+             Statement statement = conn.createStatement();
+             ResultSet rs = statement.executeQuery(SQL)) {
+            while (rs.next()) {
+                SQLXML xml= rs.getSQLXML("serviceXML");
+                String values = xml.getString();
+                PrintWriter out = new PrintWriter("D://DB_2/CRM-System/services.xml");
+                out.println(values);
+                out.flush();
+            }
+        } catch (SQLException| FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public Service getServiceByName(String name) {

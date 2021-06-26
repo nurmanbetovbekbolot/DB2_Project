@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
+<?import javafx.geometry.Insets?>
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dbproject.controller.ManagerController">
     <children>
         <TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
@@ -25,25 +26,28 @@
                                             <columns>
                                                 <TableColumn fx:id="userIdColumn" prefWidth="24.800018310546875" text="Nr" />
                                                 <TableColumn fx:id="vorNameColumn" prefWidth="121.60000610351562" text="Vorname" />
-                                                <TableColumn fx:id="nachNameColumn" prefWidth="114.4000244140625" text="Nachname" />
-                                                <TableColumn fx:id="loginColumn" text="Login" />
-                                                <TableColumn fx:id="roleColumn" prefWidth="64.79998779296875" text="Role" />
-                                                <TableColumn fx:id="createdAtColumn" prefWidth="64.79998779296875" text="Erstellt_am" />
+                                                <TableColumn fx:id="nachNameColumn" prefWidth="128.0" text="Nachname" />
+                                                <TableColumn fx:id="loginColumn" prefWidth="126.39996337890625" text="Login" />
+<!--                                                <TableColumn fx:id="roleColumn" prefWidth="64.79998779296875" text="Role" />-->
+                                                <TableColumn fx:id="createdAtColumn" prefWidth="96.800048828125" text="Erstellt_am" />
                                             </columns>
                                         </TableView>
                                     </left>
                                     <bottom>
                                         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                            <buttons>
-                                                <Button fx:id="createUserButton" mnemonicParsing="false" onAction="#handleCreateUser" text="Benutzer erstellen" />
-                                            </buttons>
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="createUserButton" mnemonicParsing="false" onAction="#handleCreateUser" text="Benutzer erstellen" />-->
+<!--                                            </buttons>-->
                                             <buttons>
                                                 <Button fx:id="editUserButton" mnemonicParsing="false" onAction="#handleEditUser" text="Benutzer bearbeiten" />
                                             </buttons>
 
-                                            <buttons>
-                                                <Button fx:id="deleteUserButton" mnemonicParsing="false" onAction="#handleDeleteUser" text="Benutzer löschen" />
-                                            </buttons>
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="deleteUserButton" mnemonicParsing="false" onAction="#handleDeleteUser" text="Benutzer löschen" />-->
+<!--                                            </buttons>-->
+                                            <BorderPane.margin>
+                                                <Insets left="15.0" right="15.0" />
+                                            </BorderPane.margin>
                                         </ButtonBar>
                                     </bottom>
                                     <center>
@@ -52,13 +56,12 @@
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="403.0" prefWidth="298.0">
                                                     <children>
 
-                                                        <Label fx:id="uId" layoutX="24.0" layoutY="33.0" text="Label" />
-                                                        <Label fx:id="uFname" layoutX="24.0" layoutY="74.0" text="Label" />
-                                                        <Label fx:id="uLname" layoutX="24.0" layoutY="115.0" text="Label" />
-                                                        <Label fx:id="uLogin" layoutX="24.0" layoutY="159.0" text="Label" />
-                                                        <Label fx:id="uRole" layoutX="24.0" layoutY="202.0" text="Label" />
-                                                        <Label fx:id="uPass" layoutX="24.0" layoutY="248.0" text="Label" />
-                                                        <Label fx:id="uDate" layoutX="24.0" layoutY="288.0" text="Label" />
+                                                        <Label fx:id="uId" layoutX="24.0" layoutY="33.0"/>
+                                                        <Label fx:id="uFname" layoutX="24.0" layoutY="74.0"/>
+                                                        <Label fx:id="uLname" layoutX="24.0" layoutY="115.0"/>
+                                                        <Label fx:id="uLogin" layoutX="24.0" layoutY="159.0"/>
+                                                        <Label fx:id="uPass" layoutX="24.0" layoutY="202.0"/>
+                                                        <Label fx:id="uDate" layoutX="24.0" layoutY="242.0"/>
                                                     </children>
                                                 </AnchorPane>
                                             </content>
@@ -89,32 +92,35 @@
                                             </columns>
                                         </TableView>
                                     </left>
-<!--                                    <bottom>-->
-<!--                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">-->
+                                    <bottom>
+                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 <!--                                            <buttons>-->
 <!--                                                <Button fx:id="createOrderButton" mnemonicParsing="false" onAction="#handleCreateOrder" text="Bestellung erstellen" />-->
 <!--                                            </buttons>-->
-<!--                                            <buttons>-->
-<!--                                                <Button fx:id="editOrderButton" mnemonicParsing="false" onAction="#handleEditOrder" text="Bestellung bearbeiten" />-->
-<!--                                            </buttons>-->
+                                            <buttons>
+                                                <Button fx:id="editOrderButton" mnemonicParsing="false" onAction="#handleEditOrder" text="Bestellung bearbeiten" />
+                                            </buttons>
 
 <!--                                            <buttons>-->
 <!--                                                <Button fx:id="deleteOrderButton" mnemonicParsing="false" onAction="#handleDeleteOrder" text="Bestellung löschen" />-->
 <!--                                            </buttons>-->
-<!--                                        </ButtonBar>-->
-<!--                                    </bottom>-->
+                                            <BorderPane.margin>
+                                                <Insets left="15.0" right="15.0" />
+                                            </BorderPane.margin>
+                                        </ButtonBar>
+                                    </bottom>
                                     <center>
                                         <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                             <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="403.0" prefWidth="300.0">
                                                     <children>
-                                                        <Label fx:id="oId" layoutX="24.0" layoutY="33.0" text="Label" />
-                                                        <Label fx:id="oName" layoutX="24.0" layoutY="74.0" text="Label" />
-                                                        <Label fx:id="oDesc" layoutX="24.0" layoutY="115.0" text="Label" />
-                                                        <Label fx:id="oClient" layoutX="24.0" layoutY="159.0" text="Label" />
-                                                        <Label fx:id="oManager" layoutX="24.0" layoutY="202.0" text="Label" />
-                                                        <Label fx:id="oPackage" layoutX="24.0" layoutY="248.0" text="Label" />
-                                                        <Label fx:id="oDate" layoutX="24.0" layoutY="288.0" text="Label" />
+                                                        <Label fx:id="oId" layoutX="24.0" layoutY="33.0" />
+                                                        <Label fx:id="oName" layoutX="24.0" layoutY="74.0"/>
+                                                        <Label fx:id="oDesc" layoutX="24.0" layoutY="115.0"/>
+                                                        <Label fx:id="oClient" layoutX="24.0" layoutY="159.0"/>
+                                                        <Label fx:id="oManager" layoutX="24.0" layoutY="202.0"/>
+                                                        <Label fx:id="oPackage" layoutX="24.0" layoutY="248.0"/>
+                                                        <Label fx:id="oDate" layoutX="24.0" layoutY="288.0"/>
                                                     </children>
                                                 </AnchorPane>
                                             </content>
@@ -147,15 +153,23 @@
                                     <bottom>
                                         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                             <buttons>
-                                                <Button fx:id="createPaketButton" mnemonicParsing="false" onAction="#handleCreatePaket" text="Paket erstellen" />
+                                                <Button fx:id="toPaketButton" mnemonicParsing="false" onAction="#handleToPackage" text="Zum Paket" />
                                             </buttons>
+
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="createPaketButton" mnemonicParsing="false" onAction="#handleCreatePaket" text="Paket erstellen" />-->
+<!--                                            </buttons>-->
                                             <buttons>
                                                 <Button fx:id="editPaketButton" mnemonicParsing="false" onAction="#handleEditPaket" text="Paket bearbeiten" />
                                             </buttons>
 
-                                            <buttons>
-                                                <Button fx:id="deletePaketButton" mnemonicParsing="false" onAction="#handleDeletePaket" text="Paket löschen" />
-                                            </buttons>
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="deletePaketButton" mnemonicParsing="false" onAction="#handleDeletePaket" text="Paket löschen" />-->
+<!--                                            </buttons>-->
+
+                                            <BorderPane.margin>
+                                                <Insets left="15.0" right="15.0" />
+                                            </BorderPane.margin>
                                         </ButtonBar>
                                     </bottom>
                                     <center>
@@ -163,11 +177,11 @@
                                             <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
                                                     <children>
-                                                        <Label fx:id="pId" layoutX="24.0" layoutY="33.0" text="Label" />
-                                                        <Label fx:id="pName" layoutX="24.0" layoutY="74.0" text="Label" />
-                                                        <Label fx:id="pDesc" layoutX="24.0" layoutY="115.0" text="Label" />
-                                                        <Label fx:id="pPrice" layoutX="24.0" layoutY="159.0" text="Label" />
-                                                        <Label fx:id="pDiscPrice" layoutX="24.0" layoutY="202.0" text="Label" />
+                                                        <Label fx:id="pId" layoutX="24.0" layoutY="33.0"/>
+                                                        <Label fx:id="pName" layoutX="24.0" layoutY="74.0"/>
+                                                        <Label fx:id="pDesc" layoutX="24.0" layoutY="115.0"/>
+                                                        <Label fx:id="pPrice" layoutX="24.0" layoutY="159.0"/>
+                                                        <Label fx:id="pDiscPrice" layoutX="24.0" layoutY="202.0"/>
                                                     </children>
                                                 </AnchorPane>
                                             </content>
@@ -179,95 +193,104 @@
                     </content>
                 </Tab>
 
-                <Tab text="Dienst">
-                    <content>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                            <children>
-                                <BorderPane prefHeight="571.2" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <left>
-                                        <TableView fx:id="serviceTable" prefHeight="571.2" prefWidth="800.0" BorderPane.alignment="CENTER">
-                                            <columns>
-                                                <TableColumn fx:id="serviceIdColumn" prefWidth="75.0" text="Nr" />
+<!--                <Tab text="Dienst">-->
+<!--                    <content>-->
+<!--                        <AnchorPane prefHeight="200.0" prefWidth="200.0">-->
+<!--                            <children>-->
+<!--                                <BorderPane prefHeight="571.2" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">-->
+<!--                                    <left>-->
+<!--                                        <TableView fx:id="serviceTable" prefHeight="571.2" prefWidth="800.0" BorderPane.alignment="CENTER">-->
+<!--                                            <columns>-->
+<!--                                                <TableColumn fx:id="serviceIdColumn" prefWidth="75.0" text="Nr" />-->
 
-                                                <TableColumn fx:id="serviceNameColumn" prefWidth="75.0" text="Name" />
+<!--                                                <TableColumn fx:id="serviceNameColumn" prefWidth="75.0" text="Name" />-->
 
-                                            </columns>
-                                        </TableView>
-                                    </left>
-                                    <bottom>
-                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                            <buttons>
-                                                <Button fx:id="createServiceButton" mnemonicParsing="false" onAction="#handleCreateService" text="Dienst erstellen" />
-                                            </buttons>
-                                            <buttons>
-                                                <Button fx:id="editServiceButton" mnemonicParsing="false" onAction="#handleEditService" text="Dienst bearbeiten" />
-                                            </buttons>
+<!--                                            </columns>-->
+<!--                                        </TableView>-->
+<!--                                    </left>-->
+<!--                                    <bottom>-->
+<!--                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">-->
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="createServiceButton" mnemonicParsing="false" onAction="#handleCreateService" text="Dienst erstellen" />-->
+<!--                                            </buttons>-->
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="editServiceButton" mnemonicParsing="false" onAction="#handleEditService" text="Dienst bearbeiten" />-->
+<!--                                            </buttons>-->
 
-                                            <buttons>
-                                                <Button fx:id="deleteServiceButton" mnemonicParsing="false" onAction="#handleDeleteService" text="Dienst löschen" />
-                                            </buttons>
-                                        </ButtonBar>
-                                    </bottom>
-                                </BorderPane>
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="deleteServiceButton" mnemonicParsing="false" onAction="#handleDeleteService" text="Dienst löschen" />-->
+<!--                                            </buttons>-->
 
-                <Tab text="Aufgabe">
-                    <content>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                            <children>
-                                <BorderPane prefHeight="571.0" prefWidth="426.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <left>
-                                        <TableView fx:id="taskTable" prefHeight="531.0" prefWidth="489.0" BorderPane.alignment="CENTER">
-                                            <columns>
-                                                <TableColumn fx:id="taskIdColumn" prefWidth="40.0" text="Nr" />
+<!--                                            <BorderPane.margin>-->
+<!--                                                <Insets left="15.0" right="15.0" />-->
+<!--                                            </BorderPane.margin>-->
+<!--                                        </ButtonBar>-->
+<!--                                    </bottom>-->
+<!--                                </BorderPane>-->
+<!--                            </children>-->
+<!--                        </AnchorPane>-->
+<!--                    </content>-->
+<!--                </Tab>-->
 
-                                                <TableColumn fx:id="taskNameColumn" prefWidth="110.4000244140625" text="Name" />
-                                                <TableColumn fx:id="taskDescriptionColumn" prefWidth="178.39996337890625" text="Bezeihnung" />
-                                                <TableColumn fx:id="taskServiceColumn" prefWidth="70.4000244140625" text="Dienst" />
-                                                <TableColumn fx:id="taskCreatedAtColumn" prefWidth="89.5999755859375" text="Erstellt_am" />
-                                            </columns>
-                                        </TableView>
-                                    </left>
+<!--                <Tab text="Aufgabe">-->
+<!--                    <content>-->
+<!--                        <AnchorPane prefHeight="200.0" prefWidth="200.0">-->
+<!--                            <children>-->
+<!--                                <BorderPane prefHeight="571.0" prefWidth="426.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">-->
+<!--                                    <left>-->
+<!--                                        <TableView fx:id="taskTable" prefHeight="531.0" prefWidth="489.0" BorderPane.alignment="CENTER">-->
+<!--                                            <columns>-->
+<!--                                                <TableColumn fx:id="taskIdColumn" prefWidth="40.0" text="Nr" />-->
 
-                                    <bottom>
-                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                            <buttons>
-                                                <Button fx:id="createTaskButton" mnemonicParsing="false" onAction="#handleCreateTask" text="Aufgabe erstellen" />
-                                            </buttons>
-                                            <buttons>
-                                                <Button fx:id="editTaskButton" mnemonicParsing="false" onAction="#handleEditTask" text="Aufgabe bearbeiten" />
-                                            </buttons>
+<!--                                                <TableColumn fx:id="taskNameColumn" prefWidth="110.4000244140625" text="Name" />-->
+<!--                                                <TableColumn fx:id="taskDescriptionColumn" prefWidth="178.39996337890625" text="Bezeihnung" />-->
+<!--                                                <TableColumn fx:id="taskServiceColumn" prefWidth="70.4000244140625" text="Dienst" />-->
+<!--                                                <TableColumn fx:id="taskCreatedAtColumn" prefWidth="89.5999755859375" text="Erstellt_am" />-->
+<!--                                            </columns>-->
+<!--                                        </TableView>-->
+<!--                                    </left>-->
 
-                                            <buttons>
-                                                <Button fx:id="deleteTaskButton" mnemonicParsing="false" onAction="#handleDeleteTask" text="Aufgabe löschen" />
-                                            </buttons>
-                                        </ButtonBar>
-                                    </bottom>
-                                    <center>
-                                        <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                            <content>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
-                                                    <children>
-                                                        <Label fx:id="tId" layoutX="24.0" layoutY="33.0" text="Label" />
-                                                        <Label fx:id="tName" layoutX="24.0" layoutY="74.0" text="Label" />
-                                                        <Label fx:id="tDesc" layoutX="24.0" layoutY="115.0" text="Label" />
-                                                        <Label fx:id="tService" layoutX="24.0" layoutY="159.0" text="Label" />
-                                                        <Label fx:id="tDate" layoutX="24.0" layoutY="202.0" text="Label" />
-                                                    </children>
-                                                </AnchorPane>
+<!--                                    <bottom>-->
+<!--                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">-->
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="createTaskButton" mnemonicParsing="false" onAction="#handleCreateTask" text="Aufgabe erstellen" />-->
+<!--                                            </buttons>-->
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="editTaskButton" mnemonicParsing="false" onAction="#handleEditTask" text="Aufgabe bearbeiten" />-->
+<!--                                            </buttons>-->
 
-                                            </content>
-                                        </ScrollPane>
-                                    </center>
-                                </BorderPane>
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
+<!--                                            <buttons>-->
+<!--                                                <Button fx:id="deleteTaskButton" mnemonicParsing="false" onAction="#handleDeleteTask" text="Aufgabe löschen" />-->
+<!--                                            </buttons>-->
+<!--                                            <BorderPane.margin>-->
+<!--                                                <Insets left="15.0" right="15.0" />-->
+<!--                                            </BorderPane.margin>-->
+<!--                                        </ButtonBar>-->
+<!--                                    </bottom>-->
+<!--                                    <center>-->
+<!--                                        <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">-->
+<!--                                            <content>-->
+<!--                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">-->
+<!--                                                    <children>-->
+<!--                                                        <Label fx:id="tId" layoutX="24.0" layoutY="33.0" text="Label" />-->
+<!--                                                        <Label fx:id="tName" layoutX="24.0" layoutY="74.0" text="Label" />-->
+<!--                                                        <Label fx:id="tDesc" layoutX="24.0" layoutY="115.0" text="Label" />-->
+<!--                                                        <Label fx:id="tService" layoutX="24.0" layoutY="159.0" text="Label" />-->
+<!--                                                        <Label fx:id="tDate" layoutX="24.0" layoutY="202.0" text="Label" />-->
+<!--                                                    </children>-->
+<!--                                                </AnchorPane>-->
+
+<!--                                            </content>-->
+<!--                                        </ScrollPane>-->
+<!--                                    </center>-->
+<!--                                </BorderPane>-->
+<!--                            </children>-->
+<!--                        </AnchorPane>-->
+<!--                    </content>-->
+<!--                </Tab>-->
             </tabs>
         </TabPane>
+        <Button fx:id="logout" layoutY="2.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="24.0" prefWidth="73.0" text="Logout" AnchorPane.rightAnchor="1.0" />
+
     </children>
 </AnchorPane>
